@@ -8,7 +8,7 @@ export default {
                 summary: () => import('./src/components/Configuration/SettingsSummary.vue'),
                 getIsValid(settings) {
                     const { publicApiKey } = settings.publicData;
-                    const { privateApiKey } = settings.privateDataData;
+                    const { privateApiKey } = settings.privateData;
                     return !!publicApiKey && !!privateApiKey;
                 },
             },
