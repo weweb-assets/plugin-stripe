@@ -43,6 +43,9 @@ export default {
                 ...this.settings,
                 publicData: { ...this.settings.publicData, publicApiKey },
             });
+            this.$nextTick(() =>
+                this.plugin.load(this.settings.publicData.publicTestApiKey || this.settings.publicData.publicApiKey)
+            );
         },
         setPrivateApiKey(privateApiKey) {
             this.$emit('update:settings', {
@@ -55,6 +58,9 @@ export default {
                 ...this.settings,
                 publicData: { ...this.settings.publicData, publicTestApiKey },
             });
+            this.$nextTick(() =>
+                this.plugin.load(this.settings.publicData.publicTestApiKey || this.settings.publicData.publicApiKey)
+            );
         },
         setPrivateTestApiKey(privateTestApiKey) {
             this.$emit('update:settings', {
