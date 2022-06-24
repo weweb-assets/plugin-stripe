@@ -4,7 +4,6 @@
         type="select"
         required
         bindable
-        small
         :options="modeOptions"
         :model-value="mode"
         placeholder="Select a mode"
@@ -15,7 +14,6 @@
         type="select"
         multiple
         required
-        small
         :options="paymentMethodOptions"
         :model-value="paymentMethods"
         placeholder="Select payment methods"
@@ -26,7 +24,6 @@
         type="select"
         required
         bindable
-        small
         :options="pageOptions"
         :model-value="successPage"
         placeholder="Select a success page"
@@ -37,7 +34,6 @@
         type="select"
         required
         bindable
-        small
         :options="pageOptions"
         :model-value="cancelPage"
         placeholder="Select a cancel page"
@@ -58,7 +54,6 @@
                 label="Price ID"
                 placeholder="Enter a value"
                 bindable
-                small
                 required
                 @update:modelValue="setItem({ ...item, price: $event })"
             />
@@ -70,7 +65,6 @@
                     :model-value="item.quantity"
                     placeholder="Enter a value"
                     bindable
-                    small
                     @update:modelValue="setItem({ ...item, quantity: $event })"
                 />
             </wwEditorFormRow>
@@ -91,7 +85,6 @@
                 label="Shippring rate ID"
                 placeholder="Enter a value"
                 bindable
-                small
                 required
                 @update:modelValue="setItem({ ...item, shipping_rate: $event })"
             />
@@ -103,7 +96,6 @@
         label="Customer ID"
         placeholder="Enter a value"
         bindable
-        small
         @update:modelValue="setCustomerId"
     />
     <wwEditorInputRow
@@ -112,54 +104,47 @@
         label="Customer Email"
         placeholder="Enter a value"
         bindable
-        small
         @update:modelValue="setCustomerEmail"
     />
-    <wwEditorFormRow label="Ajustable quantity">
-        <template #append-label>
-            <div class="ml-auto">
-                <wwEditorInputSwitch
-                    class="ml-auto"
-                    :model-value="isQuantityAdjustable"
-                    @update:modelValue="setIsQuantityAdjustable"
-                />
-            </div>
-        </template>
+    <wwEditorInputRow
+        label="Ajustable quantity"
+        type="select"
+        :model-value="isQuantityAdjustable"
+        :options="enableOptions"
+        bindable
+        @update:modelValue="setIsQuantityAdjustable"
+    />
+    <wwEditorFormRow>
         <div class="flex items-center" v-if="isQuantityAdjustable">
-            <wwEditorFormRow label="Minimum">
-                <wwEditorInput
-                    label="Minimum quantity"
-                    type="number"
-                    min="1"
-                    :model-value="minQuantity"
-                    placeholder="Enter a value"
-                    bindable
-                    small
-                    @update:modelValue="setMinQuantity"
-                />
-            </wwEditorFormRow>
+            <wwEditorInputRow
+                label="Minimum quantity"
+                type="number"
+                min="1"
+                :model-value="minQuantity"
+                placeholder="Enter a value"
+                bindable
+                @update:modelValue="setMinQuantity"
+            />
             <div class="m-1"></div>
-            <wwEditorFormRow label="Maximum">
-                <wwEditorInput
-                    label="Maximum quantity"
-                    type="number"
-                    min="1"
-                    :model-value="maxQuantity"
-                    placeholder="Enter a value"
-                    bindable
-                    small
-                    @update:modelValue="setMaxQuantity"
-                />
-            </wwEditorFormRow>
+            <wwEditorInputRow
+                label="Maximum quantity"
+                type="number"
+                min="1"
+                :model-value="maxQuantity"
+                placeholder="Enter a value"
+                bindable
+                @update:modelValue="setMaxQuantity"
+            />
         </div>
     </wwEditorFormRow>
-    <wwEditorFormRow label="Promotion codes">
-        <template #append-label>
-            <div class="ml-auto">
-                <wwEditorInputSwitch :model-value="isPromoCode" @update:modelValue="setIsPromoCode" />
-            </div>
-        </template>
-    </wwEditorFormRow>
+    <wwEditorInputRow
+        label="Promotion codes"
+        type="select"
+        :model-value="isPromoCode"
+        :options="enableOptions"
+        bindable
+        @update:modelValue="setIsPromoCode"
+    />
 </template>
 
 <script>
@@ -200,6 +185,10 @@ export default {
                 { label: 'SEPA debit', value: 'sepa_debit' },
                 { label: 'Sofort', value: 'sofort' },
                 { label: 'WeChat Pay', value: 'wechat_pay' },
+            ],
+            enableOptions: [
+                { label: 'Enable', value: true },
+                { label: 'Disable', value: false },
             ],
         };
     },

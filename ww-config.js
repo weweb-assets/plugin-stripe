@@ -21,11 +21,11 @@ export default {
             isAsync: true,
             /* wwEditor:start */
             edit: () => import('./src/components/Functions/Checkout.vue'),
-            getIsValid({ mode, cards, prices, successPage, cancelPage }) {
+            getIsValid({ mode, paymentMethods, prices, successPage, cancelPage }) {
                 return (
                     !!mode &&
-                    !!cards &&
-                    !!cards.length &&
+                    !!paymentMethods &&
+                    !!paymentMethods.length &&
                     !!prices &&
                     !!prices.length &&
                     !!prices.every(({ price }) => !!price) &&
