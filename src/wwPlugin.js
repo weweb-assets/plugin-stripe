@@ -2,7 +2,7 @@
 import './components/Configuration/SettingsEdit.vue';
 import './components/Configuration/SettingsSummary.vue';
 /* wwEditor:end */
-import Stripe from 'stripe';
+import { loadStripe } from '@stripe/stripe-js';
 
 export default {
     instance: null,
@@ -21,6 +21,6 @@ export default {
         Stripe API
     \================================================================================================*/
     async load(publicApiKey) {
-        this.instance = Stripe(publicApiKey);
+        this.instance = await loadStripe(publicApiKey);
     },
 };
