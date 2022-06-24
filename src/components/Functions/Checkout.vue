@@ -110,14 +110,6 @@
         @update:modelValue="setCustomerEmail"
     />
     <wwEditorInputRow
-        label="Ajustable quantity"
-        type="select"
-        :model-value="isQuantityAdjustable"
-        :options="enableOptions"
-        bindable
-        @update:modelValue="setIsQuantityAdjustable"
-    />
-    <wwEditorInputRow
         label="Collect phone"
         type="select"
         :model-value="isPhoneCollection"
@@ -140,6 +132,14 @@
         :options="enableOptions"
         bindable
         @update:modelValue="setIsAutoTax"
+    />
+    <wwEditorInputRow
+        label="Ajustable quantity"
+        type="select"
+        :model-value="isQuantityAdjustable"
+        :options="enableOptions"
+        bindable
+        @update:modelValue="setIsQuantityAdjustable"
     />
     <wwEditorFormRow>
         <div class="flex items-center" v-if="isQuantityAdjustable">
