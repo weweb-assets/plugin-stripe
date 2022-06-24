@@ -55,6 +55,7 @@
                 placeholder="Enter a value"
                 bindable
                 required
+                small
                 @update:modelValue="setItem({ ...item, price: $event })"
             />
             <wwEditorFormRow label="Quantity">
@@ -65,6 +66,7 @@
                     :model-value="item.quantity"
                     placeholder="Enter a value"
                     bindable
+                    small
                     @update:modelValue="setItem({ ...item, quantity: $event })"
                 />
             </wwEditorFormRow>
@@ -86,6 +88,7 @@
                 placeholder="Enter a value"
                 bindable
                 required
+                small
                 @update:modelValue="setItem({ ...item, shipping_rate: $event })"
             />
         </template>
@@ -123,6 +126,7 @@
                 :model-value="minQuantity"
                 placeholder="Enter a value"
                 bindable
+                small
                 @update:modelValue="setMinQuantity"
             />
             <div class="m-1"></div>
@@ -133,6 +137,7 @@
                 :model-value="maxQuantity"
                 placeholder="Enter a value"
                 bindable
+                small
                 @update:modelValue="setMaxQuantity"
             />
         </div>
