@@ -33,4 +33,18 @@ export default {
             });
         }
     },
+    async checkout({ currency, products, successPage, cancelPage }) {
+        if (!currency) throw new Error('No currency defined.');
+        if (!products || !products.length) throw new Error('No product defined.');
+        if (!successPage) throw new Error('No success page defined.');
+        if (!cancelPage) throw new Error('No cancel page defined.');
+
+        const websiteId = wwLib.wwWebsiteData.getInfo().id;
+        const { data: session } = await axios.post(
+            `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/stripe/create-checkout-session`,
+            { currency, products, successPage, cancelPage }
+        );
+
+        window.location.href = session.url;
+    },
 };

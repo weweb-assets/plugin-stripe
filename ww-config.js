@@ -13,6 +13,18 @@ export default {
                 },
             },
         ],
-        designSystemId: '48b73e9d-9636-4e13-8125-f6433265a97d',
     },
+    actions: [
+        {
+            name: 'Checkout',
+            code: 'checkout',
+            isAsync: true,
+            /* wwEditor:start */
+            edit: () => import('./src/components/Checkout.vue'),
+            getIsValid({ currency, products, successPage, cancelPage }) {
+                return !!currency && !!products && !!products.length && !!successPage && !!cancelPage;
+            },
+            /* wwEditor:end */
+        },
+    ],
 };
