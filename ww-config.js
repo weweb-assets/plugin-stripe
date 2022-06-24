@@ -20,7 +20,7 @@ export default {
             code: 'checkout',
             isAsync: true,
             /* wwEditor:start */
-            edit: () => import('./src/components/Checkout.vue'),
+            edit: () => import('./src/components/Functions/Checkout.vue'),
             getIsValid({ currency, products, successPage, cancelPage }) {
                 return !!currency && !!products && !!products.length && !!successPage && !!cancelPage;
             },
