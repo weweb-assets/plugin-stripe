@@ -51,6 +51,24 @@
         placeholder="Select a cancel page"
         @update:modelValue="setCancelPage"
     />
+    <wwEditorInputRow
+        type="query"
+        :model-value="customerId"
+        label="Customer ID"
+        placeholder="Enter a value"
+        bindable
+        small
+        @update:modelValue="setCustomerId"
+    />
+    <wwEditorInputRow
+        type="query"
+        :model-value="customerEmail"
+        label="Customer Email"
+        placeholder="Enter a value"
+        bindable
+        small
+        @update:modelValue="setCustomerEmail"
+    />
 </template>
 
 <script>
@@ -70,6 +88,12 @@ export default {
         cancelPage() {
             return this.args.cancelPage;
         },
+        customerId() {
+            return this.args.customerId;
+        },
+        customerEmail() {
+            return this.args.customerEmail;
+        },
         pageOptions() {
             const homePageId = wwLib.wwWebsiteData.getInfo().homePageId;
             return wwLib.wwWebsiteData.getPages().map(page => ({
@@ -88,6 +112,12 @@ export default {
         },
         setCancelPage(cancelPage) {
             this.$emit('update:args', { ...this.args, cancelPage });
+        },
+        setCustomerId(customerId) {
+            this.$emit('update:args', { ...this.args, customerId });
+        },
+        setCustomerEmail(customerEmail) {
+            this.$emit('update:args', { ...this.args, customerEmail });
         },
     },
 };
