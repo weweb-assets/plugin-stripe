@@ -35,7 +35,20 @@ export default {
             });
         }
     },
-    async checkout({ currency, prices, successPage, cancelPage, customerId, customerEmail }) {
+    async checkout({
+        prices,
+        successPage,
+        cancelPage,
+        customerId,
+        customerEmail,
+        paymentMethods,
+        isQuantityAdjustable,
+        minQuantity,
+        maxQuantity,
+        isPromoCode,
+        mode,
+        shippings,
+    }) {
         if (!currency) throw new Error('No currency defined.');
         if (!prices || !prices.length) throw new Error('No product defined.');
         if (!successPage) throw new Error('No success page defined.');
@@ -52,7 +65,20 @@ export default {
 
             const { data: session } = await axios.post(
                 `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/stripe/create-checkout-session`,
-                { currency, prices, successUrl, cancelUrl, customerId, customerEmail }
+                {
+                    prices,
+                    successUrl,
+                    cancelUrl,
+                    customerId,
+                    customerEmail,
+                    paymentMethods,
+                    isQuantityAdjustable,
+                    minQuantity,
+                    maxQuantity,
+                    isPromoCode,
+                    mode,
+                    shippings,
+                }
             );
 
             window.location.href = session.url;

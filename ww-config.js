@@ -21,8 +21,17 @@ export default {
             isAsync: true,
             /* wwEditor:start */
             edit: () => import('./src/components/Functions/Checkout.vue'),
-            getIsValid({ prices, successPage, cancelPage }) {
-                return !!prices && !!prices.length && !!successPage && !!cancelPage;
+            getIsValid({ mode, cards, prices, successPage, cancelPage }) {
+                return (
+                    !!mode &&
+                    !!cards &&
+                    !!cards.length &&
+                    !!prices &&
+                    !!prices.length &&
+                    !!prices.every(({ price }) => !!price) &&
+                    !!successPage &&
+                    !!cancelPage
+                );
             },
             /* wwEditor:end */
         },
