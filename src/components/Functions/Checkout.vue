@@ -117,6 +117,22 @@
         bindable
         @update:modelValue="setIsQuantityAdjustable"
     />
+    <wwEditorInputRow
+        label="Collect phone"
+        type="select"
+        :model-value="isPhoneCollection"
+        :options="enableOptions"
+        bindable
+        @update:modelValue="setIsPhoneCollection"
+    />
+    <wwEditorInputRow
+        label="Promotion codes"
+        type="select"
+        :model-value="isPromoCode"
+        :options="enableOptions"
+        bindable
+        @update:modelValue="setIsPromoCode"
+    />
     <wwEditorFormRow>
         <div class="flex items-center" v-if="isQuantityAdjustable">
             <wwEditorInputRow
@@ -142,22 +158,6 @@
             />
         </div>
     </wwEditorFormRow>
-    <wwEditorInputRow
-        label="Promotion codes"
-        type="select"
-        :model-value="isPromoCode"
-        :options="enableOptions"
-        bindable
-        @update:modelValue="setIsPromoCode"
-    />
-    <wwEditorInputRow
-        label="Collect phone"
-        type="select"
-        :model-value="isPhoneCollection"
-        :options="enableOptions"
-        bindable
-        @update:modelValue="setIsPhoneCollection"
-    />
 </template>
 
 <script>
