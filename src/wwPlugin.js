@@ -34,26 +34,49 @@ export default {
             });
         }
     },
-    async checkout({ currency, products, successPage, cancelPage }) {
+    async checkout({ currency, prices, successPage, cancelPage }) {
         if (!currency) throw new Error('No currency defined.');
-        if (!products || !products.length) throw new Error('No product defined.');
+        if (!prices || !prices.length) throw new Error('No product defined.');
         if (!successPage) throw new Error('No success page defined.');
         if (!cancelPage) throw new Error('No cancel page defined.');
+        try {
+            const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
-        const websiteId = wwLib.wwWebsiteData.getInfo().id;
+            const successUrl = wwLib.manager
+                ? `${window.location.origin}/${websiteId}/${successPage}`
+                : `${window.location.origin}${wwLib.wwPageHelper.getPagePath(successPage)}`;
+            const cancelUrl = wwLib.manager
+                ? `${window.location.origin}/${websiteId}/${cancelPage}`
+                : `${window.location.origin}${wwLib.wwPageHelper.getPagePath(cancelPage)}`;
 
-        const successUrl = wwLib.manager
-            ? `${window.location.origin}/${websiteId}/${successPage}`
-            : `${window.location.origin}${wwLib.wwPageHelper.getPagePath(successPage)}`;
-        const cancelUrl = wwLib.manager
-            ? `${window.location.origin}/${websiteId}/${cancelPage}`
-            : `${window.location.origin}${wwLib.wwPageHelper.getPagePath(cancelPage)}`;
+            const { data: session } = await axios.post(
+                `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/stripe/create-checkout-session`,
+                { currency, prices, successUrl, cancelUrl }
+            );
 
-        const { data: session } = await axios.post(
-            `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/stripe/create-checkout-session`,
-            { currency, products, successUrl, cancelUrl }
-        );
+            window.location.href = session.url;
+        } catch (err) {
+            throw err.response;
+        }
+    },
+    async customerPortal({ customerId, cancelPage }) {
+        if (!customerId) throw new Error('No currency defined.');
+        if (!cancelPage) throw new Error('No cancel page defined.');
+        try {
+            const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
-        window.location.href = session.url;
+            const cancelUrl = wwLib.manager
+                ? `${window.location.origin}/${websiteId}/${cancelPage}`
+                : `${window.location.origin}${wwLib.wwPageHelper.getPagePath(cancelPage)}`;
+
+            const { data: session } = await axios.post(
+                `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/create-customer-portal-session`,
+                { customerId, cancelUrl }
+            );
+
+            window.location.href = session.url;
+        } catch (err) {
+            throw err.response;
+        }
     },
 };

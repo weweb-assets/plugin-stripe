@@ -21,8 +21,19 @@ export default {
             isAsync: true,
             /* wwEditor:start */
             edit: () => import('./src/components/Functions/Checkout.vue'),
-            getIsValid({ currency, products, successPage, cancelPage }) {
-                return !!currency && !!products && !!products.length && !!successPage && !!cancelPage;
+            getIsValid({ prices, successPage, cancelPage }) {
+                return !!prices && !!prices.length && !!successPage && !!cancelPage;
+            },
+            /* wwEditor:end */
+        },
+        {
+            name: 'Customer portal',
+            code: 'customerPortal',
+            isAsync: true,
+            /* wwEditor:start */
+            edit: () => import('./src/components/Functions/CustomerPortal.vue'),
+            getIsValid({ customerId, cancelPage }) {
+                return !!customerId && !!cancelPage;
             },
             /* wwEditor:end */
         },
