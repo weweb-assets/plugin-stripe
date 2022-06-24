@@ -242,7 +242,7 @@ export default {
             return this.args.minQuantity || 1;
         },
         maxQuantity() {
-            return this.args.maxQuantity || 10;
+            return this.args.maxQuantity || 1;
         },
         isPromoCode() {
             return this.args.isPromoCode || false;
@@ -300,7 +300,12 @@ export default {
             this.$emit('update:args', { ...this.args, paymentMethods });
         },
         setIsQuantityAdjustable(isQuantityAdjustable) {
-            this.$emit('update:args', { ...this.args, isQuantityAdjustable });
+            this.$emit('update:args', {
+                ...this.args,
+                isQuantityAdjustable,
+                minQuantity: isQuantityAdjustable ? 1 : 0,
+                maxQuantity: isQuantityAdjustable ? 10 : 0,
+            });
         },
         setMinQuantity(minQuantity) {
             this.$emit('update:args', { ...this.args, minQuantity });
