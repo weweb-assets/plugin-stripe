@@ -41,9 +41,17 @@ export default {
         if (!cancelPage) throw new Error('No cancel page defined.');
 
         const websiteId = wwLib.wwWebsiteData.getInfo().id;
+
+        const successUrl = wwLib.manager
+            ? `https://${window.location.hostname}/${websiteId}/${successPage}`
+            : `https://${window.location.hostname}${wwLib.wwPageHelper.getPagePath(successPage)}`;
+        const cancelUrl = wwLib.manager
+            ? `https://${window.location.hostname}/${websiteId}/${cancelPage}`
+            : `https://${window.location.hostname}${wwLib.wwPageHelper.getPagePath(cancelPage)}`;
+
         const { data: session } = await axios.post(
             `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/stripe/create-checkout-session`,
-            { currency, products, successPage, cancelPage }
+            { currency, products, successUrl, cancelUrl }
         );
 
         window.location.href = session.url;
