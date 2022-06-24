@@ -43,11 +43,11 @@ export default {
         const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
         const successUrl = wwLib.manager
-            ? `https://${window.location.hostname}/${websiteId}/${successPage}`
-            : `https://${window.location.hostname}${wwLib.wwPageHelper.getPagePath(successPage)}`;
+            ? `${window.location.origin}/${websiteId}/${successPage}`
+            : `${window.location.origin}${wwLib.wwPageHelper.getPagePath(successPage)}`;
         const cancelUrl = wwLib.manager
-            ? `https://${window.location.hostname}/${websiteId}/${cancelPage}`
-            : `https://${window.location.hostname}${wwLib.wwPageHelper.getPagePath(cancelPage)}`;
+            ? `${window.location.origin}/${websiteId}/${cancelPage}`
+            : `${window.location.origin}${wwLib.wwPageHelper.getPagePath(cancelPage)}`;
 
         const { data: session } = await axios.post(
             `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/stripe/create-checkout-session`,
