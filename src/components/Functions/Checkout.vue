@@ -133,6 +133,14 @@
         bindable
         @update:modelValue="setIsPromoCode"
     />
+    <wwEditorInputRow
+        label="Automatic tax"
+        type="select"
+        :model-value="isAutoTax"
+        :options="enableOptions"
+        bindable
+        @update:modelValue="setIsAutoTax"
+    />
     <wwEditorFormRow>
         <div class="flex items-center" v-if="isQuantityAdjustable">
             <wwEditorInputRow
@@ -245,6 +253,9 @@ export default {
         isPhoneCollection() {
             return this.args.isPhoneCollection || false;
         },
+        isAutoTax() {
+            return this.args.isAutoTax || false;
+        },
         pageOptions() {
             const homePageId = wwLib.wwWebsiteData.getInfo().homePageId;
             return wwLib.wwWebsiteData.getPages().map(page => ({
@@ -305,6 +316,9 @@ export default {
         },
         setIsPhoneCollection(isPhoneCollection) {
             this.$emit('update:args', { ...this.args, isPhoneCollection });
+        },
+        setIsAutoTax(isAutoTax) {
+            this.$emit('update:args', { ...this.args, isAutoTax });
         },
     },
 };

@@ -49,6 +49,7 @@ export default {
         mode,
         shippings,
         isPhoneCollection,
+        isAutoTax,
     }) {
         if (!mode) throw new Error('No mode defined.');
         if (!prices || !prices.length) throw new Error('No product defined.');
@@ -81,6 +82,7 @@ export default {
                     mode,
                     shippings,
                     isPhoneCollection,
+                    isAutoTax,
                     locale: wwLib.wwLang.lang,
                 }
             );
