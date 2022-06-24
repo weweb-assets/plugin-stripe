@@ -71,7 +71,7 @@ export default {
                 : `${window.location.origin}${wwLib.wwPageHelper.getPagePath(cancelPage)}`;
 
             const { data: session } = await axios.post(
-                `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/create-customer-portal-session`,
+                `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/stripe/create-customer-portal-session`,
                 { customerId, cancelUrl }
             );
 
