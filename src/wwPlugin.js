@@ -35,7 +35,7 @@ export default {
             });
         }
     },
-    async checkout({ currency, prices, successPage, cancelPage }) {
+    async checkout({ currency, prices, successPage, cancelPage, customerId, customerEmail }) {
         if (!currency) throw new Error('No currency defined.');
         if (!prices || !prices.length) throw new Error('No product defined.');
         if (!successPage) throw new Error('No success page defined.');
@@ -52,7 +52,7 @@ export default {
 
             const { data: session } = await axios.post(
                 `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/stripe/create-checkout-session`,
-                { currency, prices, successUrl, cancelUrl }
+                { currency, prices, successUrl, cancelUrl, customerId, customerEmail }
             );
 
             window.location.href = session.url;
