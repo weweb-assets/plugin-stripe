@@ -2,6 +2,7 @@
 import './components/Configuration/SettingsEdit.vue';
 import './components/Configuration/SettingsSummary.vue';
 import './components/Functions/Checkout.vue';
+import './components/Functions/CustomerPortal.vue';
 /* wwEditor:end */
 import { loadStripe } from '@stripe/stripe-js';
 
