@@ -5,7 +5,7 @@
         label="Prices"
         bindable
         @update:modelValue="setPrices"
-        @add-item="setPrices([...(prices || []), {}])"
+        @add-item="setPrices([...(prices || []), { quantity: 1 }])"
     >
         <template #default="{ item, setItem }">
             <wwEditorInputRow
@@ -17,15 +17,18 @@
                 small
                 @update:modelValue="setItem({ ...item, id: $event })"
             />
-            <wwEditorInputRow
-                type="query"
-                :model-value="item.quantity"
-                label="Quantity"
-                placeholder="Enter a value"
-                bindable
-                small
-                @update:modelValue="setItem({ ...item, quantity: $event })"
-            />
+            <wwEditorFormRow label="Quantity">
+                <wwEditorInputText
+                    label="Quantity"
+                    type="number"
+                    min="1"
+                    :model-value="item.quantity"
+                    placeholder="Enter a value"
+                    bindable
+                    small
+                    @update:modelValue="setItem({ ...item, quantity: $event })"
+                />
+            </wwEditorFormRow>
         </template>
     </wwEditorInputRow>
     <wwEditorInputRow
