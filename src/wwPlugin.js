@@ -49,8 +49,9 @@ export default {
         mode,
         shippings,
     }) {
-        if (!currency) throw new Error('No currency defined.');
+        if (!mode) throw new Error('No mode defined.');
         if (!prices || !prices.length) throw new Error('No product defined.');
+        if (!paymentMethods || !paymentMethods.length) throw new Error('No payment method defined.');
         if (!successPage) throw new Error('No success page defined.');
         if (!cancelPage) throw new Error('No cancel page defined.');
         try {
@@ -78,6 +79,7 @@ export default {
                     isPromoCode,
                     mode,
                     shippings,
+                    locale: wwLib.wwLang.lang,
                 }
             );
 
