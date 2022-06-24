@@ -48,6 +48,7 @@ export default {
         isPromoCode,
         mode,
         shippings,
+        isPhoneCollection,
     }) {
         if (!mode) throw new Error('No mode defined.');
         if (!prices || !prices.length) throw new Error('No product defined.');
@@ -79,13 +80,14 @@ export default {
                     isPromoCode,
                     mode,
                     shippings,
+                    isPhoneCollection,
                     locale: wwLib.wwLang.lang,
                 }
             );
 
             window.location.href = session.url;
         } catch (err) {
-            throw err.response;
+            throw new Error(err.response.data);
         }
     },
     async customerPortal({ customerId, cancelPage }) {

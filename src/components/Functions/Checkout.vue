@@ -150,6 +150,14 @@
         bindable
         @update:modelValue="setIsPromoCode"
     />
+    <wwEditorInputRow
+        label="Collect phone"
+        type="select"
+        :model-value="isPhoneCollection"
+        :options="enableOptions"
+        bindable
+        @update:modelValue="setIsPhoneCollection"
+    />
 </template>
 
 <script>
@@ -234,6 +242,9 @@ export default {
         shippings() {
             return this.args.shippings || [];
         },
+        isPhoneCollection() {
+            return this.args.isPhoneCollection || false;
+        },
         pageOptions() {
             const homePageId = wwLib.wwWebsiteData.getInfo().homePageId;
             return wwLib.wwWebsiteData.getPages().map(page => ({
@@ -291,6 +302,9 @@ export default {
         },
         setShippings(shippings) {
             this.$emit('update:args', { ...this.args, shippings });
+        },
+        setIsPhoneCollection(isPhoneCollection) {
+            this.$emit('update:args', { ...this.args, isPhoneCollection });
         },
     },
 };
