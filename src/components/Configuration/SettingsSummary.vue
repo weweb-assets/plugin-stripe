@@ -1,26 +1,26 @@
 <template>
     <wwEditorFormRow label="Public API key">
-        <div class="stripe-settings-summary__elem">
-            <div><wwEditorIcon large name="key" class="stripe-settings-summary__icon" /></div>
-            <span class="stripe-settings-summary__value caption-m">{{ settings.publicData.publicApiKey }}</span>
+        <div class="flex items-center body-2">
+            <wwEditorIcon name="key" class="mr-2" />
+            <div class="text-ellipsis">{{ settings.publicData.publicApiKey }}</div>
         </div>
     </wwEditorFormRow>
     <wwEditorFormRow label="Private API key">
-        <div class="stripe-settings-summary__elem">
-            <div><wwEditorIcon large name="key" class="stripe-settings-summary__icon" /></div>
-            <span class="stripe-settings-summary__value caption-m">{{ privateApiKey }}</span>
+        <div class="flex items-center body-2">
+            <wwEditorIcon name="key" class="mr-2" />
+            <div class="text-ellipsis">{{ privateApiKey }}</div>
         </div>
     </wwEditorFormRow>
     <wwEditorFormRow label="Public test API key">
-        <div class="stripe-settings-summary__elem">
-            <div><wwEditorIcon large name="key" class="stripe-settings-summary__icon" /></div>
-            <span class="stripe-settings-summary__value caption-m">{{ settings.publicData.publicTestApiKey }}</span>
+        <div class="flex items-center body-2">
+            <wwEditorIcon name="key" class="mr-2" />
+            <div class="text-ellipsis">{{ settings.publicData.publicTestApiKey }}</div>
         </div>
     </wwEditorFormRow>
     <wwEditorFormRow label="Private test API key">
-        <div class="stripe-settings-summary__elem">
-            <div><wwEditorIcon large name="key" class="stripe-settings-summary__icon" /></div>
-            <span class="stripe-settings-summary__value caption-m">{{ privateTestApiKey }}</span>
+        <div class="flex items-center body-2">
+            <wwEditorIcon name="key" class="mr-2" />
+            <div class="text-ellipsis">{{ privateTestApiKey }}</div>
         </div>
     </wwEditorFormRow>
 </template>
@@ -42,20 +42,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.stripe-settings-summary {
-    &__elem {
-        display: flex;
-        align-items: center;
-        &:not(:last-child) {
-            margin-bottom: var(--ww-spacing-02);
-        }
-    }
-    &__icon {
-        margin-right: var(--ww-spacing-02);
-    }
-    &__value {
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+.text-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 </style>

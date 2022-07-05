@@ -13,6 +13,38 @@ export default {
                 },
             },
         ],
-        designSystemId: '48b73e9d-9636-4e13-8125-f6433265a97d',
     },
+    actions: [
+        {
+            name: 'Checkout',
+            code: 'checkout',
+            isAsync: true,
+            /* wwEditor:start */
+            edit: () => import('./src/components/Functions/Checkout.vue'),
+            getIsValid({ mode, paymentMethods, prices, successPage, cancelPage }) {
+                return (
+                    !!mode &&
+                    !!paymentMethods &&
+                    !!paymentMethods.length &&
+                    !!prices &&
+                    !!prices.length &&
+                    !!prices.every(({ price }) => !!price) &&
+                    !!successPage &&
+                    !!cancelPage
+                );
+            },
+            /* wwEditor:end */
+        },
+        {
+            name: 'Customer portal',
+            code: 'customerPortal',
+            isAsync: true,
+            /* wwEditor:start */
+            edit: () => import('./src/components/Functions/CustomerPortal.vue'),
+            getIsValid({ customerId, cancelPage }) {
+                return !!customerId && !!cancelPage;
+            },
+            /* wwEditor:end */
+        },
+    ],
 };
