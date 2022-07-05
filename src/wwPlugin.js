@@ -28,11 +28,13 @@ export default {
             this.instance = await loadStripe(publicApiKey);
             if (!this.instance) throw new Error('Invalid Stripe configuration.');
         } catch (err) {
-            wwLib.wwLib.error(err);
+            wwLib.wwLog.error(err);
+            /* wwEditor:start */
             wwLib.wwNotification.open({
                 text: 'Invalid Stripe configuration.',
                 color: 'red',
             });
+            /* wwEditor:end */
         }
     },
     async checkout({
