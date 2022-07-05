@@ -28,7 +28,7 @@ export default {
             this.instance = await loadStripe(publicApiKey);
             if (!this.instance) throw new Error('Invalid Stripe configuration.');
         } catch (err) {
-            wwLib.wwLob.error(err);
+            wwLib.wwLib.error(err);
             wwLib.wwNotification.open({
                 text: 'Invalid Stripe configuration.',
                 color: 'red',
