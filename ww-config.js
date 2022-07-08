@@ -46,5 +46,33 @@ export default {
             },
             /* wwEditor:end */
         },
+        {
+            name: 'Create payment intent',
+            code: 'createPaymentIntent',
+            isAsync: true,
+            /* wwEditor:start */
+            edit: () => import('./src/components/Functions/CreatePaymentIntent.vue'),
+            getIsValid({ paymentMethods, prices }) {
+                return (
+                    !!paymentMethods &&
+                    !!paymentMethods.length &&
+                    !!prices &&
+                    !!prices.length &&
+                    !!prices.every(({ price }) => !!price)
+                );
+            },
+            /* wwEditor:end */
+        },
+        {
+            name: 'Retrieve payment intent',
+            code: 'retrievePaymentIntent',
+            isAsync: true,
+            /* wwEditor:start */
+            edit: () => import('./src/components/Functions/RetrievePaymentIntent.vue'),
+            getIsValid({ clientSecret }) {
+                return !!clientSecret;
+            },
+            /* wwEditor:end */
+        },
     ],
 };

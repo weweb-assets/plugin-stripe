@@ -3,6 +3,8 @@ import './components/Configuration/SettingsEdit.vue';
 import './components/Configuration/SettingsSummary.vue';
 import './components/Functions/Checkout.vue';
 import './components/Functions/CustomerPortal.vue';
+import './components/Functions/CreatePaymentIntent.vue';
+import './components/Functions/RetrievePaymentIntent.vue';
 /* wwEditor:end */
 import { loadStripe } from '@stripe/stripe-js';
 
@@ -113,5 +115,25 @@ export default {
         } catch (err) {
             throw err.response;
         }
+    },
+    async createPaymentIntent({ prices, customerId, paymentMethods }) {
+        if (!prices || !prices.length) throw new Error('No product defined.');
+        if (!paymentMethods || !paymentMethods.length) throw new Error('No payment method defined.');
+        try {
+            const websiteId = wwLib.wwWebsiteData.getInfo().id;
+            const { data: paymentIntent } = await axios.post(
+                `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/stripe/create-payment-intent`,
+                { prices, customerId, paymentMethods }
+            );
+            return paymentIntent;
+        } catch (err) {
+            throw new Error(err.response.data);
+        }
+    },
+    async retrievePaymentIntent({ clientSecret }) {
+        if (!clientSecret) throw new Error('No client secret defined.');
+
+        const { paymentIntent } = await this.instance.retrievePaymentIntent(clientSecret);
+        return paymentIntent;
     },
 };
