@@ -153,6 +153,6 @@ export default {
             elements,
             confirmParams: { return_url: redirectUrl },
         });
-        throw error;
+        throw new Error(error.message, { cause: error });
     },
 };

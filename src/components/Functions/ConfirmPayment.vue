@@ -46,7 +46,8 @@ export default {
             return Object.values(componentVariables)
                 .filter(variable => variable.type === 'stripe')
                 .map(variable => {
-                    const wwElement = wwLib.$store.getters['websiteData/getWwObjects'][variable.id] || {};
+                    const wwElement =
+                        wwLib.$store.getters['websiteData/getWwObjects'][variable.id.split('-').shift()] || {};
                     return { label: wwElement.name || variable.name, value: variable.id, icon: 'stripe' };
                 });
         },
