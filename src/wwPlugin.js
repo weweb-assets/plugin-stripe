@@ -6,6 +6,7 @@ import './components/Functions/CustomerPortal.vue';
 import './components/Functions/CreatePaymentIntent.vue';
 import './components/Functions/RetrievePaymentIntent.vue';
 import './components/Functions/ConfirmPayment.vue';
+import './components/Functions/ConfirmCardPayment.vue';
 /* wwEditor:end */
 import { loadStripe } from '@stripe/stripe-js';
 
