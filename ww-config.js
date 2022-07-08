@@ -80,8 +80,8 @@ export default {
             isAsync: true,
             /* wwEditor:start */
             edit: () => import('./src/components/Functions/ConfirmPayment.vue'),
-            getIsValid({ elements, redirectPage }) {
-                return !!elements && !!redirectPage;
+            getIsValid({ elementId, redirectPage }) {
+                return !!elementId && !!redirectPage;
             },
             /* wwEditor:end */
         },

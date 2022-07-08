@@ -6,9 +6,9 @@
         bindable
         :options="stripeElementOptions"
         :actions="stripeElementActions"
-        :model-value="elements"
+        :model-value="elementId"
         placeholder="Select a stripe element"
-        @update:modelValue="setStripeElement"
+        @update:modelValue="setElementId"
         @action="onAction"
     />
     <wwEditorInputRow
@@ -35,8 +35,8 @@ export default {
         };
     },
     computed: {
-        elements() {
-            return this.args.elements;
+        elementId() {
+            return this.args.elementId;
         },
         redirectPage() {
             return this.args.redirectPage;
@@ -45,7 +45,10 @@ export default {
             const componentVariables = wwLib.$store.getters['data/getComponentVariables'];
             return Object.values(componentVariables)
                 .filter(variable => variable.type === 'stripe')
-                .map(variable => ({ label: variable.name, value: variable.id, icon: 'stripe' }));
+                .map(variable => {
+                    const wwElement = wwLib.$store.getters['websiteData/getWwObjects'][variable.id] || {};
+                    return { label: wwElement.name || variable.name, value: variable.id, icon: 'stripe' };
+                });
         },
         pageOptions() {
             const homePageId = wwLib.wwWebsiteData.getInfo().homePageId;
@@ -57,8 +60,8 @@ export default {
         },
     },
     methods: {
-        setElements(elements) {
-            this.$emit('update:args', { ...this.args, elements });
+        setElementId(elementId) {
+            this.$emit('update:args', { ...this.args, elementId });
         },
         setRedirectPage(redirectPage) {
             this.$emit('update:args', { ...this.args, redirectPage });
