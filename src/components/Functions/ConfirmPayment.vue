@@ -29,11 +29,6 @@ export default {
         args: { type: Object, default: () => {} },
     },
     emits: ['update:args'],
-    setup() {
-        return {
-            componentVariables: wwLib.wwVariable.useEditorVariables({ website: false, plugin: false }),
-        };
-    },
     data() {
         return {
             stripeElementActions: [{ icon: 'add', label: 'Add a stripe element', onAction: this.addStripeElement }],
@@ -47,7 +42,8 @@ export default {
             return this.args.redirectPage;
         },
         stripeElementOptions() {
-            return Object.values(this.componentVariables)
+            const componentVariables = wwLib.$store.getters['data/getComponentVariables'];
+            return Object.values(componentVariables)
                 .filter(variable => variable.type === 'stripe')
                 .map(variable => ({ label: variable.name, value: variable.id, icon: 'stripe' }));
         },

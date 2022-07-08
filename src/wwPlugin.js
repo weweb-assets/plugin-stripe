@@ -137,9 +137,12 @@ export default {
         const { paymentIntent } = await this.instance.retrievePaymentIntent(clientSecret);
         return paymentIntent;
     },
-    async confirmPayment({ elements, redirectPage }) {
-        if (!elements) throw new Error('No element defined.');
+    async confirmPayment({ elementId, redirectPage }) {
+        if (!elementId) throw new Error('No element defined.');
         if (!redirectPage) throw new Error('No redirect page defined.');
+
+        const elements = wwLib.wwVariable.getValue(elementId);
+        if (!elements) throw new Error('Invalid Stripe element.');
 
         const websiteId = wwLib.wwWebsiteData.getInfo().id;
         const redirectUrl = wwLib.manager
@@ -147,7 +150,7 @@ export default {
             : `${window.location.origin}${wwLib.wwPageHelper.getPagePath(redirectPage)}`;
 
         const { error } = await this.instance.confirmPayment({
-            elements: elements,
+            elements,
             confirmParams: { return_url: redirectUrl },
         });
         throw error;
