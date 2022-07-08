@@ -155,4 +155,17 @@ export default {
         });
         throw new Error(error.message, { cause: error });
     },
+    async confirmCardPayment({ clientSecret, elementId }) {
+        if (!clientSecret) throw new Error('No client secret defined.');
+        if (!elementId) throw new Error('No element defined.');
+
+        const card = wwLib.wwVariable.getValue(elementId);
+        if (!card) throw new Error('Invalid Stripe element.');
+
+        const result = await this.instance.confirmCardPayment(clientSecret, {
+            payment_method: { card },
+        });
+        if (result.error) throw new Error(result.error.message, { cause: result.error });
+        return result;
+    },
 };

@@ -7,19 +7,18 @@
         :options="stripeElementOptions"
         :actions="stripeElementActions"
         :model-value="elementId"
-        placeholder="Select a stripe payment element"
+        placeholder="Select a stripe card element"
         @update:modelValue="setElementId"
         @action="onAction"
     />
     <wwEditorInputRow
-        label="Redirect page"
-        type="select"
+        label="Client secret"
+        type="query"
         required
         bindable
-        :options="pageOptions"
-        :model-value="redirectPage"
-        placeholder="Select a redirect page"
-        @update:modelValue="setRedirectPage"
+        :model-value="clientSecret"
+        placeholder="Enter a value"
+        @update:modelValue="setClientSecret"
     />
 </template>
 
@@ -38,34 +37,26 @@ export default {
         elementId() {
             return this.args.elementId;
         },
-        redirectPage() {
-            return this.args.redirectPage;
+        clientSecret() {
+            return this.args.clientSecret;
         },
         stripeElementOptions() {
             const componentVariables = wwLib.$store.getters['data/getComponentVariables'];
             return Object.values(componentVariables)
-                .filter(variable => variable.type === 'stripe-payment')
+                .filter(variable => variable.type === 'stripe-card')
                 .map(variable => {
                     const wwElement =
                         wwLib.$store.getters['websiteData/getWwObjects'][variable.id.split('-value').shift()] || {};
                     return { label: wwElement.name || variable.name, value: variable.id, icon: 'stripe' };
                 });
         },
-        pageOptions() {
-            const homePageId = wwLib.wwWebsiteData.getInfo().homePageId;
-            return wwLib.wwWebsiteData.getPages().map(page => ({
-                label: page.name,
-                value: page.id,
-                icon: page.id === homePageId ? 'home' : page.pageUserGroups.length ? 'auth' : 'document',
-            }));
-        },
     },
     methods: {
         setElementId(elementId) {
             this.$emit('update:args', { ...this.args, elementId });
         },
-        setRedirectPage(redirectPage) {
-            this.$emit('update:args', { ...this.args, redirectPage });
+        setClientSecret(clientSecret) {
+            this.$emit('update:args', { ...this.args, clientSecret });
         },
         addStripeElement() {
             // eslint-disable-next-line vue/custom-event-name-casing

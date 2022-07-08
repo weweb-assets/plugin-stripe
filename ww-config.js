@@ -85,5 +85,16 @@ export default {
             },
             /* wwEditor:end */
         },
+        {
+            name: 'Confirm card payment',
+            code: 'confirmCardPayment',
+            isAsync: true,
+            /* wwEditor:start */
+            edit: () => import('./src/components/Functions/ConfirmCardPayment.vue'),
+            getIsValid({ clientSecret, elementId }) {
+                return !!clientSecret && !!elementId;
+            },
+            /* wwEditor:end */
+        },
     ],
 };
