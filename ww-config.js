@@ -74,5 +74,16 @@ export default {
             },
             /* wwEditor:end */
         },
+        {
+            name: 'Confirm payment',
+            code: 'confirmPayment',
+            isAsync: true,
+            /* wwEditor:start */
+            edit: () => import('./src/components/Functions/ConfirmPayment.vue'),
+            getIsValid({ elements, redirectPage }) {
+                return !!elements && !!redirectPage;
+            },
+            /* wwEditor:end */
+        },
     ],
 };

@@ -5,6 +5,7 @@ import './components/Functions/Checkout.vue';
 import './components/Functions/CustomerPortal.vue';
 import './components/Functions/CreatePaymentIntent.vue';
 import './components/Functions/RetrievePaymentIntent.vue';
+import './components/Functions/ConfirmPayment.vue';
 /* wwEditor:end */
 import { loadStripe } from '@stripe/stripe-js';
 
@@ -135,5 +136,20 @@ export default {
 
         const { paymentIntent } = await this.instance.retrievePaymentIntent(clientSecret);
         return paymentIntent;
+    },
+    async confirmPayment({ elements, redirectPage }) {
+        if (!elements) throw new Error('No element defined.');
+        if (!redirectPage) throw new Error('No redirect page defined.');
+
+        const websiteId = wwLib.wwWebsiteData.getInfo().id;
+        const redirectUrl = wwLib.manager
+            ? `${window.location.origin}/${websiteId}/${redirectPage}`
+            : `${window.location.origin}${wwLib.wwPageHelper.getPagePath(redirectPage)}`;
+
+        const { error } = await this.instance.confirmPayment({
+            elements: elements,
+            confirmParams: { return_url: redirectUrl },
+        });
+        throw error;
     },
 };
