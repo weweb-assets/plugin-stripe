@@ -28,7 +28,7 @@ export default {
     async load(publicApiKey) {
         if (!publicApiKey) return;
         try {
-            this.instance = await loadStripe(publicApiKey);
+            this.instance = await wwLib.getFrontWindow().Stripe(publicApiKey);
             if (!this.instance) throw new Error('Invalid Stripe configuration.');
         } catch (err) {
             wwLib.wwLog.error(err);

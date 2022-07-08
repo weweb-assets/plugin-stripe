@@ -47,7 +47,7 @@ export default {
                 .filter(variable => variable.type === 'stripe')
                 .map(variable => {
                     const wwElement =
-                        wwLib.$store.getters['websiteData/getWwObjects'][variable.id.split('-').shift()] || {};
+                        wwLib.$store.getters['websiteData/getWwObjects'][variable.id.split('-value').shift()] || {};
                     return { label: wwElement.name || variable.name, value: variable.id, icon: 'stripe' };
                 });
         },
