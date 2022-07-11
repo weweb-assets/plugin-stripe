@@ -167,6 +167,6 @@ export default {
             payment_method: { card },
         });
         if (result.error) throw new Error(result.error.message, { cause: result.error });
-        return result;
+        return result.paymentIntent;
     },
 };
