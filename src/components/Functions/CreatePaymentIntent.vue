@@ -100,15 +100,6 @@ export default {
             return this.args.paymentMethods;
         },
     },
-    mounted() {
-        if (!this.mode) {
-            this.$emit('update:args', {
-                ...this.args,
-                paymentMethods: ['card'],
-                prices: [{ quantity: 1 }],
-            });
-        }
-    },
     methods: {
         setPrices(prices) {
             this.$emit('update:args', { ...this.args, prices });
