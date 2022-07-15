@@ -91,7 +91,7 @@ export default {
     },
     computed: {
         prices() {
-            return this.args.prices || [];
+            return this.args.prices;
         },
         customerId() {
             return this.args.customerId;
