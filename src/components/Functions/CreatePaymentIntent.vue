@@ -101,7 +101,7 @@ export default {
         },
     },
     mounted() {
-        if (!this.paymentMethods || !this.paymentMethods.length) {
+        if (!this.paymentMethods) {
             this.$emit('update:args', {
                 ...this.args,
                 paymentMethods: ['card'],
