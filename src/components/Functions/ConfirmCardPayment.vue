@@ -62,7 +62,7 @@ export default {
             // eslint-disable-next-line vue/custom-event-name-casing
             wwLib.$emit('wwTopBar:open', 'WEBSITE_ADD');
             // eslint-disable-next-line vue/custom-event-name-casing
-            wwLib.$emit('wwTopBar:add:setMenu', 'stripe-design-system'); // TODO
+            wwLib.$emit('wwTopBar:add:setMenu', '48b73e9d-9636-4e13-8125-f6433265a97d');
         },
         onAction(action, index) {
             action.onAction && action.onAction(index);

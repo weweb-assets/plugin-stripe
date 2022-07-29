@@ -39,7 +39,7 @@ export default {
             return wwLib.wwWebsiteData.getPages().map(page => ({
                 label: page.name,
                 value: page.id,
-                icon: page.id === homePageId ? 'home' : page.pageUserGroups.length ? 'auth' : 'document',
+                icon: page.id === homePageId ? 'home' : page.pageUserGroups.length ? 'auth' : 'page',
             }));
         },
     },
