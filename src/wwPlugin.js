@@ -3,6 +3,10 @@ import './components/Configuration/SettingsEdit.vue';
 import './components/Configuration/SettingsSummary.vue';
 import './components/Functions/Checkout.vue';
 import './components/Functions/CustomerPortal.vue';
+import './components/Functions/CreatePaymentIntent.vue';
+import './components/Functions/RetrievePaymentIntent.vue';
+import './components/Functions/ConfirmPayment.vue';
+import './components/Functions/ConfirmCardPayment.vue';
 /* wwEditor:end */
 import { loadStripe } from '@stripe/stripe-js';
 
@@ -25,7 +29,7 @@ export default {
     async load(publicApiKey) {
         if (!publicApiKey) return;
         try {
-            this.instance = await loadStripe(publicApiKey);
+            this.instance = await wwLib.getFrontWindow().Stripe(publicApiKey);
             if (!this.instance) throw new Error('Invalid Stripe configuration.');
         } catch (err) {
             wwLib.wwLog.error(err);
@@ -113,5 +117,56 @@ export default {
         } catch (err) {
             throw err.response;
         }
+    },
+    async createPaymentIntent({ prices, customerId, paymentMethods }) {
+        if (!prices || !prices.length) throw new Error('No product defined.');
+        if (!paymentMethods || !paymentMethods.length) throw new Error('No payment method defined.');
+        try {
+            const websiteId = wwLib.wwWebsiteData.getInfo().id;
+            const { data: paymentIntent } = await axios.post(
+                `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/stripe/create-payment-intent`,
+                { prices, customerId, paymentMethods }
+            );
+            return paymentIntent;
+        } catch (err) {
+            throw new Error(err.response.data);
+        }
+    },
+    async retrievePaymentIntent({ clientSecret }) {
+        if (!clientSecret) throw new Error('No client secret defined.');
+
+        const { paymentIntent } = await this.instance.retrievePaymentIntent(clientSecret);
+        return paymentIntent;
+    },
+    async confirmPayment({ elementId, redirectPage }) {
+        if (!elementId) throw new Error('No element defined.');
+        if (!redirectPage) throw new Error('No redirect page defined.');
+
+        const elements = wwLib.wwVariable.getValue(elementId);
+        if (!elements) throw new Error('Invalid Stripe element.');
+
+        const websiteId = wwLib.wwWebsiteData.getInfo().id;
+        const redirectUrl = wwLib.manager
+            ? `${window.location.origin}/${websiteId}/${redirectPage}`
+            : `${window.location.origin}${wwLib.wwPageHelper.getPagePath(redirectPage)}`;
+
+        const { error } = await this.instance.confirmPayment({
+            elements,
+            confirmParams: { return_url: redirectUrl },
+        });
+        throw new Error(error.message, { cause: error });
+    },
+    async confirmCardPayment({ clientSecret, elementId }) {
+        if (!clientSecret) throw new Error('No client secret defined.');
+        if (!elementId) throw new Error('No element defined.');
+
+        const card = wwLib.wwVariable.getValue(elementId);
+        if (!card) throw new Error('Invalid Stripe element.');
+
+        const result = await this.instance.confirmCardPayment(clientSecret, {
+            payment_method: { card },
+        });
+        if (result.error) throw new Error(result.error.message, { cause: result.error });
+        return result.paymentIntent;
     },
 };
