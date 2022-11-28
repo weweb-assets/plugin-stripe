@@ -61,6 +61,7 @@ export default {
         shippings,
         isPhoneCollection,
         isAutoTax,
+        metadata,
     }) {
         if (!mode) throw new Error('No mode defined.');
         if (!prices || !prices.length) throw new Error('No product defined.');
@@ -94,6 +95,7 @@ export default {
                     shippings,
                     isPhoneCollection,
                     isAutoTax,
+                    metadata,
                     locale: wwLib.wwLang.lang,
                 }
             );

@@ -166,6 +166,35 @@
             />
         </div>
     </wwEditorFormRow>
+    <wwEditorInputRow
+        type="array"
+        :model-value="metadata"
+        label="Metadata"
+        bindable
+        @update:modelValue="setMetadata"
+        @add-item="setMetadata([...(metadata || []), {}])"
+    >
+        <template #default="{ item, setItem }">
+            <wwEditorInputRow
+                type="query"
+                :model-value="item.key"
+                label="Key"
+                placeholder="Enter a value"
+                bindable
+                small
+                @update:modelValue="setItem({ ...item, key: $event })"
+            />
+            <wwEditorInputRow
+                type="query"
+                :model-value="item.value"
+                label="Value"
+                placeholder="Enter a value"
+                bindable
+                small
+                @update:modelValue="setItem({ ...item, value: $event })"
+            />
+        </template>
+    </wwEditorInputRow>
 </template>
 
 <script>
@@ -255,6 +284,9 @@ export default {
         },
         isAutoTax() {
             return this.args.isAutoTax || false;
+        },  
+        metadata() {
+            return this.args.metadata || [];
         },
         pageOptions() {
             const homePageId = wwLib.wwWebsiteData.getInfo().homePageId;
@@ -324,6 +356,9 @@ export default {
         },
         setIsAutoTax(isAutoTax) {
             this.$emit('update:args', { ...this.args, isAutoTax });
+        },
+        setMetadata(metadata) {
+            this.$emit('update:args', { ...this.args, metadata });
         },
     },
 };
