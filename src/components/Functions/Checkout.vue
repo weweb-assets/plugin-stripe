@@ -141,31 +141,29 @@
         bindable
         @update:modelValue="setIsQuantityAdjustable"
     />
-    <wwEditorFormRow>
-        <div class="flex items-center" v-if="isQuantityAdjustable">
-            <wwEditorInputRow
-                label="Minimum quantity"
-                type="number"
-                min="1"
-                :model-value="minQuantity"
-                placeholder="Enter a value"
-                bindable
-                small
-                @update:modelValue="setMinQuantity"
-            />
-            <div class="m-1"></div>
-            <wwEditorInputRow
-                label="Maximum quantity"
-                type="number"
-                min="1"
-                :model-value="maxQuantity"
-                placeholder="Enter a value"
-                bindable
-                small
-                @update:modelValue="setMaxQuantity"
-            />
-        </div>
-    </wwEditorFormRow>
+    <div class="flex items-center" v-if="isQuantityAdjustable" >
+        <wwEditorInputRow
+            label="Minimum quantity"
+            type="number"
+            min="1"
+            :model-value="minQuantity"
+            placeholder="Enter a value"
+            bindable
+            small
+            @update:modelValue="setMinQuantity"
+        />
+        <div class="m-1"></div>
+        <wwEditorInputRow
+            label="Maximum quantity"
+            type="number"
+            min="1"
+            :model-value="maxQuantity"
+            placeholder="Enter a value"
+            bindable
+            small
+            @update:modelValue="setMaxQuantity"
+        />
+    </div>
     <wwEditorInputRow
         type="array"
         :model-value="metadata"
