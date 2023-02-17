@@ -29,12 +29,14 @@ export default {
     async load(publicApiKey) {
         if (!publicApiKey) return;
         try {
-            /* wwEditor:start */
-            this.instance = await wwLib.getFrontWindow().Stripe(publicApiKey);
-            /* wwEditor:end */
-            /* wwFront:start */
             this.instance = await loadStripe(publicApiKey);
-            /* wwFront:end */
+            /* wwEditor:start */
+            this.instance = await new Promise(resolve =>
+                setTimeout(async () => {
+                    resolve(await wwLib.getFrontWindow().Stripe(publicApiKey));
+                }, 2500)
+            );
+            /* wwEditor:end */
             if (!this.instance) throw new Error('Invalid Stripe configuration.');
         } catch (err) {
             wwLib.wwLog.error(err);
