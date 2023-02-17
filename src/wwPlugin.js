@@ -29,9 +29,7 @@ export default {
     async load(publicApiKey) {
         if (!publicApiKey) return;
         try {
-            /* wwFront:start */
             this.instance = await loadStripe(publicApiKey);
-            /* wwFront:end */
             /* wwEditor:start */
             this.instance = await wwLib.getFrontWindow().Stripe(publicApiKey);
             /* wwEditor:end */
