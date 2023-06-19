@@ -58,8 +58,7 @@ export default {
                     !!paymentMethods &&
                     !!paymentMethods.length &&
                     !!prices &&
-                    !!prices.length &&
-                    !!prices.every(({ price }) => !!price)
+                    ((!!prices.length && !!prices.every(({ price }) => !!price)) || prices.__wwtype !== undefined)
                 );
             },
             /* wwEditor:end */
