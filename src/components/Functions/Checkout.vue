@@ -250,7 +250,7 @@ export default {
             ],
             langOptions: [
                 { label: 'Current page lang', value: null },
-                { label: 'Auto (Browser lang)', value: 'auto', default: true },
+                { label: 'Auto (Browser lang)', value: 'auto' },
                 { label: 'bg', value: 'bg' },
                 { label: 'cs', value: 'cs' },
                 { label: 'da', value: 'da' },
