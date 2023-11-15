@@ -63,6 +63,7 @@ export default {
         shippings,
         isPhoneCollection,
         isAutoTax,
+        locale,
         metadata,
     }) {
         if (!mode) throw new Error('No mode defined.');
@@ -98,7 +99,7 @@ export default {
                     isPhoneCollection,
                     isAutoTax,
                     metadata,
-                    locale: wwLib.wwLang.lang,
+                    locale: locale || wwLib.wwLang.lang,
                 }
             );
 
