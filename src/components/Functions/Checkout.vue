@@ -164,16 +164,25 @@
             @update:modelValue="setMaxQuantity"
         />
     </div>
-    <wwEditorInputRow
-        label="Checkout language"
-        type="select"
-        placeholder="Current page lang"
-        bindable
-        :options="langOptions"
-        :model-value="locale"
-        @update:modelValue="setLocale"
-    >
-    </wwEditorInputRow>
+    <wwEditorFormRow label="Checkout language">
+        <div class="flex items-center">
+            <wwEditorInput
+                type="select"
+                placeholder="Current page lang"
+                bindable
+                :options="langOptions"
+                :model-value="locale"
+                @update:modelValue="setLocale"
+            >
+            </wwEditorInput>
+            <wwEditorQuestionMark
+                tooltip-position="top-left"
+                class="ml-2"
+                forcedContent="If your current page lang is not supported by stripe, it will fallback to user's browser lang.  
+When using a binding you have to use the lang code (ex: en). [More information in the documentation](https://stripe.com/docs/api/checkout/sessions/create#create_checkout_session-locale)."
+            />
+        </div>
+    </wwEditorFormRow>
     <wwEditorInputRow
         type="array"
         :model-value="metadata"
@@ -206,6 +215,7 @@
 </template>
 
 <script>
+import locales from '../../locales';
 export default {
     props: {
         plugin: { type: Object, required: true },
@@ -247,50 +257,6 @@ export default {
             enableOptions: [
                 { label: 'Enable', value: true },
                 { label: 'Disable', value: false },
-            ],
-            langOptions: [
-                { label: 'Current page lang', value: null },
-                { label: 'Auto (Browser lang)', value: 'auto' },
-                { label: 'bg', value: 'bg' },
-                { label: 'cs', value: 'cs' },
-                { label: 'da', value: 'da' },
-                { label: 'de', value: 'de' },
-                { label: 'el', value: 'el' },
-                { label: 'en', value: 'en' },
-                { label: 'en-GB', value: 'en-GB' },
-                { label: 'es', value: 'es' },
-                { label: 'es-419', value: 'es-419' },
-                { label: 'et', value: 'et' },
-                { label: 'fi', value: 'fi' },
-                { label: 'fil', value: 'fil' },
-                { label: 'fr', value: 'fr' },
-                { label: 'fr-CA', value: 'fr-CA' },
-                { label: 'hr', value: 'hr' },
-                { label: 'hu', value: 'hu' },
-                { label: 'id', value: 'id' },
-                { label: 'it', value: 'it' },
-                { label: 'ja', value: 'ja' },
-                { label: 'ko', value: 'ko' },
-                { label: 'lt', value: 'lt' },
-                { label: 'lv', value: 'lv' },
-                { label: 'ms', value: 'ms' },
-                { label: 'mt', value: 'mt' },
-                { label: 'nb', value: 'nb' },
-                { label: 'nl', value: 'nl' },
-                { label: 'pl', value: 'pl' },
-                { label: 'pt', value: 'pt' },
-                { label: 'pt-BR', value: 'pt-BR' },
-                { label: 'ro', value: 'ro' },
-                { label: 'ru', value: 'ru' },
-                { label: 'sk', value: 'sk' },
-                { label: 'sl', value: 'sl' },
-                { label: 'sv', value: 'sv' },
-                { label: 'th', value: 'th' },
-                { label: 'tr', value: 'tr' },
-                { label: 'vi', value: 'vi' },
-                { label: 'zh', value: 'zh' },
-                { label: 'zh-HK', value: 'zh-HK' },
-                { label: 'zh-TW', value: 'zh-TW' },
             ],
         };
     },
@@ -350,6 +316,16 @@ export default {
                 value: page.id,
                 icon: page.id === homePageId ? 'home' : page.pageUserGroups.length ? 'auth' : 'page',
             }));
+        },
+        langOptions() {
+            return [
+                { label: 'Current page lang', value: null },
+                { label: 'Auto (Browser lang)', value: 'auto' },
+                ...Object.keys(locales).map(key => ({
+                    label: locales[key],
+                    value: key,
+                })),
+            ];
         },
     },
     mounted() {
