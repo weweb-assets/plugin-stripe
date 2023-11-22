@@ -178,8 +178,8 @@
             <wwEditorQuestionMark
                 tooltip-position="top-left"
                 class="ml-2"
-                forcedContent="If your current page lang is not supported by stripe, it will fallback to user's browser lang.  
-When using a binding you have to use the lang code (ex: en). [More information in the documentation](https://stripe.com/docs/api/checkout/sessions/create#create_checkout_session-locale)."
+                forcedContent="If your current page lang is not supported by stripe, it will fallback to the browser’s locale.  
+When using a binding you have to use the IETF language tag of the locale (ex: en). [See documentation](https://stripe.com/docs/api/checkout/sessions/create#create_checkout_session-locale)."
             />
         </div>
     </wwEditorFormRow>
