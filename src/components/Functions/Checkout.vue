@@ -141,7 +141,7 @@
         bindable
         @update:modelValue="setIsQuantityAdjustable"
     />
-    <div class="flex items-center" v-if="isQuantityAdjustable" >
+    <div class="flex items-center" v-if="isQuantityAdjustable">
         <wwEditorInputRow
             label="Minimum quantity"
             type="number"
@@ -164,6 +164,25 @@
             @update:modelValue="setMaxQuantity"
         />
     </div>
+    <wwEditorFormRow label="Checkout language">
+        <div class="flex items-center">
+            <wwEditorInput
+                type="select"
+                placeholder="Current page lang"
+                bindable
+                :options="langOptions"
+                :model-value="locale"
+                @update:modelValue="setLocale"
+            >
+            </wwEditorInput>
+            <wwEditorQuestionMark
+                tooltip-position="top-left"
+                class="ml-2"
+                forcedContent="If your current page lang is not supported by stripe, it will fallback to the browser’s locale.  
+When using a binding you have to use the IETF language tag of the locale (ex: en). [See documentation](https://stripe.com/docs/api/checkout/sessions/create#create_checkout_session-locale)."
+            />
+        </div>
+    </wwEditorFormRow>
     <wwEditorInputRow
         type="array"
         :model-value="metadata"
@@ -196,6 +215,7 @@
 </template>
 
 <script>
+import locales from '../../locales';
 export default {
     props: {
         plugin: { type: Object, required: true },
@@ -282,7 +302,10 @@ export default {
         },
         isAutoTax() {
             return this.args.isAutoTax || false;
-        },  
+        },
+        locale() {
+            return this.args.locale || null;
+        },
         metadata() {
             return this.args.metadata || [];
         },
@@ -294,6 +317,16 @@ export default {
                 icon: page.id === homePageId ? 'home' : page.pageUserGroups.length ? 'auth' : 'page',
             }));
         },
+        langOptions() {
+            return [
+                { label: 'Current page lang', value: null },
+                { label: 'Auto (Browser lang)', value: 'auto' },
+                ...Object.keys(locales).map(key => ({
+                    label: locales[key],
+                    value: key,
+                })),
+            ];
+        },
     },
     mounted() {
         if (!this.mode) {
@@ -304,6 +337,7 @@ export default {
                 successPage: wwLib.wwWebsiteData.getInfo().homePageId,
                 cancelPage: wwLib.wwWebsiteData.getInfo().homePageId,
                 prices: [{ quantity: 1 }],
+                locale: 'auto',
             });
         }
     },
@@ -354,6 +388,9 @@ export default {
         },
         setIsAutoTax(isAutoTax) {
             this.$emit('update:args', { ...this.args, isAutoTax });
+        },
+        setLocale(locale) {
+            this.$emit('update:args', { ...this.args, locale });
         },
         setMetadata(metadata) {
             this.$emit('update:args', { ...this.args, metadata });

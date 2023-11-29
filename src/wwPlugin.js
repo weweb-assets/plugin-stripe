@@ -9,6 +9,7 @@ import './components/Functions/ConfirmPayment.vue';
 import './components/Functions/ConfirmCardPayment.vue';
 /* wwEditor:end */
 import { loadStripe } from '@stripe/stripe-js';
+import locales from './locales';
 
 export default {
     instance: null,
@@ -63,6 +64,7 @@ export default {
         shippings,
         isPhoneCollection,
         isAutoTax,
+        locale,
         metadata,
     }) {
         if (!mode) throw new Error('No mode defined.');
@@ -98,7 +100,7 @@ export default {
                     isPhoneCollection,
                     isAutoTax,
                     metadata,
-                    locale: wwLib.wwLang.lang,
+                    locale: locales[locale || wwLib.wwLang.lang] ? locale || wwLib.wwLang.lang : 'auto',
                 }
             );
 
