@@ -1,3 +1,5 @@
+import { ref } from 'vue';
+
 /* wwEditor:start */
 import './components/Configuration/SettingsEdit.vue';
 import './components/Configuration/SettingsSummary.vue';
@@ -13,6 +15,7 @@ import locales from './locales';
 
 export default {
     instance: null,
+    isInstanceLoaded: ref(false),
     /*=============================================m_ÔÔ_m=============================================\
         Plugin API
     \================================================================================================*/
@@ -35,9 +38,11 @@ export default {
             this.instance = await new Promise(resolve =>
                 setTimeout(async () => {
                     resolve(await wwLib.getFrontWindow().Stripe(publicApiKey));
+
                 }, 2500)
             );
             /* wwEditor:end */
+            this.isInstanceLoaded.value = true;
             if (!this.instance) throw new Error('Invalid Stripe configuration.');
         } catch (err) {
             wwLib.wwLog.error(err);
