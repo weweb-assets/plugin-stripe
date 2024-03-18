@@ -14,7 +14,8 @@ import { loadStripe } from '@stripe/stripe-js';
 import locales from './locales';
 
 export default {
-    instance: ref(null),
+    instance: null,
+    isInstanceLoaded: ref(false),
     /*=============================================m_ÔÔ_m=============================================\
         Plugin API
     \================================================================================================*/
@@ -32,15 +33,17 @@ export default {
     async load(publicApiKey) {
         if (!publicApiKey) return;
         try {
-            this.instance.value = await loadStripe(publicApiKey);
+            this.instance = await loadStripe(publicApiKey);
             /* wwEditor:start */
-            this.instance.value = await new Promise(resolve =>
+            this.instance = await new Promise(resolve =>
                 setTimeout(async () => {
                     resolve(await wwLib.getFrontWindow().Stripe(publicApiKey));
+
                 }, 2500)
             );
             /* wwEditor:end */
-            if (!this.instance.value) throw new Error('Invalid Stripe configuration.');
+            this.isInstanceLoaded.value = true;
+            if (!this.instance) throw new Error('Invalid Stripe configuration.');
         } catch (err) {
             wwLib.wwLog.error(err);
             /* wwEditor:start */
@@ -148,7 +151,7 @@ export default {
     async retrievePaymentIntent({ clientSecret }) {
         if (!clientSecret) throw new Error('No client secret defined.');
 
-        const { paymentIntent } = await this.instance.value.retrievePaymentIntent(clientSecret);
+        const { paymentIntent } = await this.instance.retrievePaymentIntent(clientSecret);
         return paymentIntent;
     },
     async confirmPayment({ elementId, redirectPage }) {
@@ -163,7 +166,7 @@ export default {
             ? `${window.location.origin}/${websiteId}/${redirectPage}`
             : `${window.location.origin}${wwLib.wwPageHelper.getPagePath(redirectPage)}`;
 
-        const { error } = await this.instance.value.confirmPayment({
+        const { error } = await this.instance.confirmPayment({
             elements,
             confirmParams: { return_url: redirectUrl },
         });
@@ -176,7 +179,7 @@ export default {
         const card = wwLib.wwVariable.getValue(elementId);
         if (!card) throw new Error('Invalid Stripe element.');
 
-        const result = await this.instance.value.confirmCardPayment(clientSecret, {
+        const result = await this.instance.confirmCardPayment(clientSecret, {
             payment_method: { card },
         });
         if (result.error) throw new Error(result.error.message, { cause: result.error });
