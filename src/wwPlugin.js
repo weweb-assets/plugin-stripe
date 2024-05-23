@@ -19,7 +19,7 @@ export default {
     /*=============================================m_ÔÔ_m=============================================\
         Plugin API
     \================================================================================================*/
-    async onLoad(settings) {
+    async _onLoad(settings) {
         /* wwFront:start */
         await this.load(settings.publicData.publicApiKey);
         /* wwFront:end */
