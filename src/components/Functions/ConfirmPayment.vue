@@ -29,6 +29,13 @@ export default {
         args: { type: Object, default: () => {} },
     },
     emits: ['update:args'],
+    setup() {
+        const { components: componentVariables } = wwLib.wwVariable.useEditorVariables();
+
+        return {
+            componentVariables,
+        }
+    },
     data() {
         return {
             stripeElementActions: [{ icon: 'add', label: 'Add a stripe element', onAction: this.addStripeElement }],
@@ -42,12 +49,10 @@ export default {
             return this.args.redirectPage;
         },
         stripeElementOptions() {
-            const componentVariables = wwLib.$store.getters['data/getComponentVariables'];
-            return Object.values(componentVariables)
+            return Object.values(this.componentVariables)
                 .filter(variable => variable.type === 'stripe-payment')
                 .map(variable => {
-                    const wwElement =
-                        wwLib.$store.getters['websiteData/getWwObjects'][variable.id.split('-value').shift()] || {};
+                    const wwElement = wwLib.wwObjectHelper.getWwObject[variable.componentId] || {};
                     return { label: wwElement.name || variable.name, value: variable.id, icon: 'stripe' };
                 });
         },
