@@ -30,6 +30,33 @@
         @update:modelValue="setSuccessPage"
     />
     <wwEditorInputRow
+        type="array"
+        :model-value="successPageQueryParams"
+        label="Success page query params"
+        small
+        bindable
+        @update:modelValue="setSuccessPageQueryParams"
+        @add-item="setSuccessPageQueryParams([...(successPageQueryParams || []), { name: '', value: '' }])"
+    >
+        <template #default="{ item, setItem }">
+            <wwEditorInputRow
+                type="query"
+                :model-value="item.name"
+                placeholder="Enter a name"
+                small
+                @update:modelValue="setItem({ ...item, name: $event })"
+            />
+            <wwEditorInputRow
+                type="query"
+                :model-value="item.value"
+                placeholder="Enter a value"
+                small
+                bindable
+                @update:modelValue="setItem({ ...item, value: $event })"
+            />
+        </template>
+    </wwEditorInputRow>
+    <wwEditorInputRow
         label="Cancel page"
         type="select"
         required
@@ -39,6 +66,33 @@
         placeholder="Select a cancel page"
         @update:modelValue="setCancelPage"
     />
+    <wwEditorInputRow
+        type="array"
+        :model-value="cancelPageQueryParams"
+        label="Cancel page query params"
+        small
+        bindable
+        @update:modelValue="setCancelPageQueryParams"
+        @add-item="setCancelPageQueryParams([...(cancelPageQueryParams || []), { name: '', value: '' }])"
+    >
+        <template #default="{ item, setItem }">
+            <wwEditorInputRow
+                type="query"
+                :model-value="item.name"
+                placeholder="Enter a name"
+                small
+                @update:modelValue="setItem({ ...item, name: $event })"
+            />
+            <wwEditorInputRow
+                type="query"
+                :model-value="item.value"
+                placeholder="Enter a value"
+                small
+                bindable
+                @update:modelValue="setItem({ ...item, value: $event })"
+            />
+        </template>
+    </wwEditorInputRow>
     <wwEditorInputRow
         type="array"
         :model-value="prices"
@@ -327,6 +381,12 @@ export default {
                 })),
             ];
         },
+        successPageQueryParams() {
+            return this.args.successPageQueryParams || [];
+        },
+        cancelPageQueryParams() {
+            return this.args.cancelPageQueryParams || [];
+        },
     },
     mounted() {
         if (!this.mode) {
@@ -394,6 +454,12 @@ export default {
         },
         setMetadata(metadata) {
             this.$emit('update:args', { ...this.args, metadata });
+        },
+        setSuccessPageQueryParams(successPageQueryParams) {
+            this.$emit('update:args', { ...this.args, successPageQueryParams });
+        },
+        setCancelPageQueryParams(cancelPageQueryParams) {
+            this.$emit('update:args', { ...this.args, cancelPageQueryParams });
         },
     },
 };

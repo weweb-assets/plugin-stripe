@@ -38,7 +38,6 @@ export default {
             this.instance = await new Promise(resolve =>
                 setTimeout(async () => {
                     resolve(await wwLib.getFrontWindow().Stripe(publicApiKey));
-
                 }, 2500)
             );
             /* wwEditor:end */
@@ -87,12 +86,24 @@ export default {
                 ? `${window.location.origin}/${websiteId}/${cancelPage}`
                 : `${window.location.origin}${wwLib.wwPageHelper.getPagePath(cancelPage)}`;
 
+            const successQuery = new URLSearchParams(
+                successPageQueryParams.reduce((acc, query) => {
+                    if (query.value) acc[query.name] = query.value;
+                    return acc;
+                }, {})
+            ).toString();
+            const cancelQuery = new URLSearchParams(
+                cancelPageQueryParams.reduce((acc, query) => {
+                    if (query.value) acc[query.name] = query.value;
+                    return acc;
+                }, {})
+            ).toString();
             const { data: session } = await axios.post(
                 `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/stripe/create-checkout-session`,
                 {
                     prices,
-                    successUrl,
-                    cancelUrl,
+                    successUrl: `${successUrl}${successQuery ? '?' + successQuery : ''}`,
+                    cancelUrl: `${cancelUrl}${cancelQuery ? '?' + cancelQuery : ''}`,
                     customerId,
                     customerEmail,
                     paymentMethods,
