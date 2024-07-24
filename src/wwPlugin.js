@@ -56,7 +56,9 @@ export default {
     async checkout({
         prices,
         successPage,
+        successPageQueryParams,
         cancelPage,
+        cancelPageQueryParams,
         customerId,
         customerEmail,
         paymentMethods,
@@ -122,7 +124,7 @@ export default {
 
             window.location.href = session.url;
         } catch (err) {
-            throw new Error(err.response.data);
+            throw new Error(err?.response?.data);
         }
     },
     async customerPortal({ customerId, cancelPage }) {

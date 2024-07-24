@@ -32,7 +32,7 @@
     <wwEditorInputRow
         type="array"
         :model-value="successPageQueryParams"
-        label="Success page query params"
+        label="Query params"
         small
         bindable
         @update:modelValue="setSuccessPageQueryParams"
@@ -69,7 +69,7 @@
     <wwEditorInputRow
         type="array"
         :model-value="cancelPageQueryParams"
-        label="Cancel page query params"
+        label="Query params"
         small
         bindable
         @update:modelValue="setCancelPageQueryParams"
