@@ -56,9 +56,9 @@ export default {
     async checkout({
         prices,
         successPage,
-        successPageQueryParams,
+        successPageQueryParams = [],
         cancelPage,
-        cancelPageQueryParams,
+        cancelPageQueryParams = [],
         customerId,
         customerEmail,
         paymentMethods,
