@@ -86,6 +86,7 @@ export default {
                 { label: 'SEPA debit', value: 'sepa_debit' },
                 { label: 'Sofort', value: 'sofort' },
                 { label: 'WeChat Pay', value: 'wechat_pay' },
+                { label: 'Twint', value: 'twint' },
             ],
         };
     },
