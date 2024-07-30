@@ -85,6 +85,7 @@ export default {
                 { label: 'Pre-authorized debit in Canada', value: 'acss_debit' },
                 { label: 'SEPA debit', value: 'sepa_debit' },
                 { label: 'Sofort', value: 'sofort' },
+                { label: 'Twint', value: 'twint' },
                 { label: 'WeChat Pay', value: 'wechat_pay' },
             ],
         };
