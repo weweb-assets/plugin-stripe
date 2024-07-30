@@ -35,6 +35,10 @@
         label="Query params"
         small
         bindable
+        :bindingValidation="{
+            tooltip: `Must be an array of objects with a name and a value. [{ name: 'param-name', value: 'param-value' }]`,
+            type: 'array',
+        }"
         @update:modelValue="setSuccessPageQueryParams"
         @add-item="setSuccessPageQueryParams([...(successPageQueryParams || []), { name: '', value: '' }])"
     >
@@ -72,6 +76,10 @@
         label="Query params"
         small
         bindable
+        :bindingValidation="{
+            tooltip: `Must be an array of objects with a name and a value. [{ name: 'param-name', value: 'param-value' }]`,
+            type: 'array',
+        }"
         @update:modelValue="setCancelPageQueryParams"
         @add-item="setCancelPageQueryParams([...(cancelPageQueryParams || []), { name: '', value: '' }])"
     >
