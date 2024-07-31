@@ -316,6 +316,7 @@ export default {
                 { label: 'Sofort', value: 'sofort' },
                 { label: 'Twint', value: 'twint' },
                 { label: 'WeChat Pay', value: 'wechat_pay' },
+                { label: 'Twint', value: 'twint' },
             ],
             enableOptions: [
                 { label: 'Enable', value: true },
