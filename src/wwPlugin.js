@@ -38,7 +38,6 @@ export default {
             this.instance = await new Promise(resolve =>
                 setTimeout(async () => {
                     resolve(await wwLib.getFrontWindow().Stripe(publicApiKey));
-
                 }, 2500)
             );
             /* wwEditor:end */
@@ -57,7 +56,9 @@ export default {
     async checkout({
         prices,
         successPage,
+        successPageQueryParams = [],
         cancelPage,
+        cancelPageQueryParams = [],
         customerId,
         customerEmail,
         paymentMethods,
@@ -87,12 +88,24 @@ export default {
                 ? `${window.location.origin}/${websiteId}/${cancelPage}`
                 : `${window.location.origin}${wwLib.wwPageHelper.getPagePath(cancelPage)}`;
 
+            const successQuery = new URLSearchParams(
+                successPageQueryParams.reduce((acc, query) => {
+                    if (query.value) acc[query.name] = query.value;
+                    return acc;
+                }, {})
+            ).toString();
+            const cancelQuery = new URLSearchParams(
+                cancelPageQueryParams.reduce((acc, query) => {
+                    if (query.value) acc[query.name] = query.value;
+                    return acc;
+                }, {})
+            ).toString();
             const { data: session } = await axios.post(
                 `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/stripe/create-checkout-session`,
                 {
                     prices,
-                    successUrl,
-                    cancelUrl,
+                    successUrl: `${successUrl}${successQuery ? '?' + successQuery : ''}`,
+                    cancelUrl: `${cancelUrl}${cancelQuery ? '?' + cancelQuery : ''}`,
                     customerId,
                     customerEmail,
                     paymentMethods,
@@ -111,7 +124,7 @@ export default {
 
             window.location.href = session.url;
         } catch (err) {
-            throw new Error(err.response.data);
+            throw new Error(err?.response?.data);
         }
     },
     async customerPortal({ customerId, cancelPage }) {

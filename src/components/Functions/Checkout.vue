@@ -30,6 +30,37 @@
         @update:modelValue="setSuccessPage"
     />
     <wwEditorInputRow
+        type="array"
+        :model-value="successPageQueryParams"
+        label="Query params"
+        small
+        bindable
+        :bindingValidation="{
+            tooltip: `Must be an array of objects with a name and a value. [{ name: 'param-name', value: 'param-value' }]`,
+            type: 'array',
+        }"
+        @update:modelValue="setSuccessPageQueryParams"
+        @add-item="setSuccessPageQueryParams([...(successPageQueryParams || []), { name: '', value: '' }])"
+    >
+        <template #default="{ item, setItem }">
+            <wwEditorInputRow
+                type="query"
+                :model-value="item.name"
+                placeholder="Enter a name"
+                small
+                @update:modelValue="setItem({ ...item, name: $event })"
+            />
+            <wwEditorInputRow
+                type="query"
+                :model-value="item.value"
+                placeholder="Enter a value"
+                small
+                bindable
+                @update:modelValue="setItem({ ...item, value: $event })"
+            />
+        </template>
+    </wwEditorInputRow>
+    <wwEditorInputRow
         label="Cancel page"
         type="select"
         required
@@ -39,6 +70,37 @@
         placeholder="Select a cancel page"
         @update:modelValue="setCancelPage"
     />
+    <wwEditorInputRow
+        type="array"
+        :model-value="cancelPageQueryParams"
+        label="Query params"
+        small
+        bindable
+        :bindingValidation="{
+            tooltip: `Must be an array of objects with a name and a value. [{ name: 'param-name', value: 'param-value' }]`,
+            type: 'array',
+        }"
+        @update:modelValue="setCancelPageQueryParams"
+        @add-item="setCancelPageQueryParams([...(cancelPageQueryParams || []), { name: '', value: '' }])"
+    >
+        <template #default="{ item, setItem }">
+            <wwEditorInputRow
+                type="query"
+                :model-value="item.name"
+                placeholder="Enter a name"
+                small
+                @update:modelValue="setItem({ ...item, name: $event })"
+            />
+            <wwEditorInputRow
+                type="query"
+                :model-value="item.value"
+                placeholder="Enter a value"
+                small
+                bindable
+                @update:modelValue="setItem({ ...item, value: $event })"
+            />
+        </template>
+    </wwEditorInputRow>
     <wwEditorInputRow
         type="array"
         :model-value="prices"
@@ -252,6 +314,7 @@ export default {
                 { label: 'Pre-authorized debit in Canada', value: 'acss_debit' },
                 { label: 'SEPA debit', value: 'sepa_debit' },
                 { label: 'Sofort', value: 'sofort' },
+                { label: 'Twint', value: 'twint' },
                 { label: 'WeChat Pay', value: 'wechat_pay' },
             ],
             enableOptions: [
@@ -327,6 +390,12 @@ export default {
                 })),
             ];
         },
+        successPageQueryParams() {
+            return this.args.successPageQueryParams || [];
+        },
+        cancelPageQueryParams() {
+            return this.args.cancelPageQueryParams || [];
+        },
     },
     mounted() {
         if (!this.mode) {
@@ -394,6 +463,12 @@ export default {
         },
         setMetadata(metadata) {
             this.$emit('update:args', { ...this.args, metadata });
+        },
+        setSuccessPageQueryParams(successPageQueryParams) {
+            this.$emit('update:args', { ...this.args, successPageQueryParams });
+        },
+        setCancelPageQueryParams(cancelPageQueryParams) {
+            this.$emit('update:args', { ...this.args, cancelPageQueryParams });
         },
     },
 };
