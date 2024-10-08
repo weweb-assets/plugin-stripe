@@ -1,18 +1,18 @@
 <template>
     <div v-if="!isEveryKeysSet" class="mb-3 label-sm content-warning flex items-center">
         <wwEditorIcon class="mr-1" name="warning" small />
-        If not set correctly, staging and editor keys will always use the required production keys.
+        STAGING and EDITOR use PRODUCTION keys if empty
     </div>
     <!-- PROD -->
     <div class="my-3 label-sm flex items-center">Production</div>
-    <wwEditorFormRow required label="Public prod API key">
+    <wwEditorFormRow required label="Public API key">
         <wwEditorInputText
             placeholder="pk_live_********"
             :model-value="settings.publicData.publicApiKey"
             @update:modelValue="setPublicApiKey"
         />
     </wwEditorFormRow>
-    <wwEditorFormRow required label="Private prod API key">
+    <wwEditorFormRow required label="Private API key">
         <wwEditorInputText
             type="password"
             placeholder="sk_live_********"
@@ -22,15 +22,14 @@
     </wwEditorFormRow>
     <!-- STAGING -->
     <div class="my-3 label-sm flex items-center">Staging</div>
-    <wwEditorFormRow label="Public staging API key">
+    <wwEditorFormRow label="Public API key">
         <wwEditorInputText
             placeholder="pk_test_********"
             :model-value="settings.publicData.publicStagingApiKey"
-            tooltip="If not set, the public prod API key will be used."
             @update:modelValue="setPublicStagingApiKey"
         />
     </wwEditorFormRow>
-    <wwEditorFormRow label="Private staging API key">
+    <wwEditorFormRow label="Private API key">
         <wwEditorInputText
             type="password"
             placeholder="sk_test_********"
@@ -40,14 +39,14 @@
     </wwEditorFormRow>
     <!-- EDITOR -->
     <div class="my-3 label-sm flex items-center">Editor</div>
-    <wwEditorFormRow label="Public editor API key">
+    <wwEditorFormRow label="Public API key">
         <wwEditorInputText
             placeholder="pk_test_********"
             :model-value="settings.publicData.publicTestApiKey"
             @update:modelValue="setPublicTestApiKey"
         />
     </wwEditorFormRow>
-    <wwEditorFormRow label="Private editor API key">
+    <wwEditorFormRow label="Private API key">
         <wwEditorInputText
             type="password"
             placeholder="sk_test_********"
