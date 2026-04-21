@@ -82,10 +82,10 @@ export default {
             const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
             const successUrl = wwLib.manager
-                ? `${window.location.origin}/${websiteId}/${successPage}`
+                ? `${window.location.origin}/${successPage}`
                 : `${window.location.origin}${wwLib.wwPageHelper.getPagePath(successPage)}`;
             const cancelUrl = wwLib.manager
-                ? `${window.location.origin}/${websiteId}/${cancelPage}`
+                ? `${window.location.origin}/${cancelPage}`
                 : `${window.location.origin}${wwLib.wwPageHelper.getPagePath(cancelPage)}`;
 
             const successQuery = new URLSearchParams(
@@ -134,7 +134,7 @@ export default {
             const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
             const cancelUrl = wwLib.manager
-                ? `${window.location.origin}/${websiteId}/${cancelPage}`
+                ? `${window.location.origin}/${cancelPage}`
                 : `${window.location.origin}${wwLib.wwPageHelper.getPagePath(cancelPage)}`;
 
             const { data: session } = await axios.post(
@@ -174,9 +174,8 @@ export default {
         const elements = wwLib.wwVariable.getValue(elementId);
         if (!elements) throw new Error('Invalid Stripe element.');
 
-        const websiteId = wwLib.wwWebsiteData.getInfo().id;
         const redirectUrl = wwLib.manager
-            ? `${window.location.origin}/${websiteId}/${redirectPage}`
+            ? `${window.location.origin}/${redirectPage}`
             : `${window.location.origin}${wwLib.wwPageHelper.getPagePath(redirectPage)}`;
 
         const { error } = await this.instance.confirmPayment({
