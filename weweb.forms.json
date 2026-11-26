@@ -1,0 +1,868 @@
+{
+    "schemaVersion": 1,
+    "designSystemId": "48b73e9d-9636-4e13-8125-f6433265a97d",
+    "settings": {
+        "groups": [
+            {
+                "key": "production",
+                "label": "Production"
+            },
+            {
+                "key": "staging",
+                "label": "Staging"
+            },
+            {
+                "key": "editor",
+                "label": "Editor"
+            }
+        ],
+        "fields": [
+            {
+                "key": "publicApiKey",
+                "type": "text",
+                "label": "Publishable key",
+                "group": "production",
+                "storage": "publicData",
+                "required": true
+            },
+            {
+                "key": "privateApiKey",
+                "type": "secret",
+                "label": "Secret key",
+                "group": "production",
+                "storage": "privateData",
+                "required": true
+            },
+            {
+                "key": "publicStagingApiKey",
+                "type": "text",
+                "label": "Publishable key",
+                "group": "staging",
+                "storage": "publicData"
+            },
+            {
+                "key": "privateStagingApiKey",
+                "type": "secret",
+                "label": "Secret key",
+                "group": "staging",
+                "storage": "privateData"
+            },
+            {
+                "key": "publicTestApiKey",
+                "type": "text",
+                "label": "Publishable key",
+                "group": "editor",
+                "storage": "publicData"
+            },
+            {
+                "key": "privateTestApiKey",
+                "type": "secret",
+                "label": "Secret key",
+                "group": "editor",
+                "storage": "privateData"
+            }
+        ]
+    },
+    "actions": [
+        {
+            "code": "checkout",
+            "name": "Checkout",
+            "isAsync": true,
+            "validation": "requiredFields",
+            "form": {
+                "fields": [
+                    {
+                        "key": "mode",
+                        "label": "Mode",
+                        "type": "choice",
+                        "bindable": true,
+                        "required": true,
+                        "choices": [
+                            {
+                                "label": "Payment",
+                                "value": "payment"
+                            },
+                            {
+                                "label": "Subscription",
+                                "value": "subscription"
+                            }
+                        ],
+                        "initial": "payment"
+                    },
+                    {
+                        "key": "paymentMethods",
+                        "label": "Payment methods",
+                        "type": "choice",
+                        "required": true,
+                        "multiple": true,
+                        "minItems": 1,
+                        "choices": [
+                            {
+                                "label": "ACH Direct Debit",
+                                "value": "us_bank_account"
+                            },
+                            {
+                                "label": "Affirm",
+                                "value": "affirm"
+                            },
+                            {
+                                "label": "Afterpay and Clearpay",
+                                "value": "afterpay_clearpay"
+                            },
+                            {
+                                "label": "Alipay",
+                                "value": "alipay"
+                            },
+                            {
+                                "label": "Bacs Direct Debit",
+                                "value": "bacs_debit"
+                            },
+                            {
+                                "label": "Bancontact",
+                                "value": "bancontact"
+                            },
+                            {
+                                "label": "BECS direct debit",
+                                "value": "au_becs_debit"
+                            },
+                            {
+                                "label": "Boleto",
+                                "value": "boleto"
+                            },
+                            {
+                                "label": "Cards",
+                                "value": "card"
+                            },
+                            {
+                                "label": "EPS",
+                                "value": "eps"
+                            },
+                            {
+                                "label": "FPX",
+                                "value": "fpx"
+                            },
+                            {
+                                "label": "Giropay",
+                                "value": "giropay"
+                            },
+                            {
+                                "label": "GrabPay",
+                                "value": "grabpay"
+                            },
+                            {
+                                "label": "iDEAL",
+                                "value": "ideal"
+                            },
+                            {
+                                "label": "Klarna",
+                                "value": "klarna"
+                            },
+                            {
+                                "label": "Konbini",
+                                "value": "konbini"
+                            },
+                            {
+                                "label": "Link",
+                                "value": "link"
+                            },
+                            {
+                                "label": "OXXO",
+                                "value": "oxxo"
+                            },
+                            {
+                                "label": "P24",
+                                "value": "p24"
+                            },
+                            {
+                                "label": "PayNow",
+                                "value": "paynow"
+                            },
+                            {
+                                "label": "Pre-authorized debit in Canada",
+                                "value": "acss_debit"
+                            },
+                            {
+                                "label": "SEPA debit",
+                                "value": "sepa_debit"
+                            },
+                            {
+                                "label": "Sofort",
+                                "value": "sofort"
+                            },
+                            {
+                                "label": "Twint",
+                                "value": "twint"
+                            },
+                            {
+                                "label": "WeChat Pay",
+                                "value": "wechat_pay"
+                            }
+                        ],
+                        "initial": ["card"]
+                    },
+                    {
+                        "key": "successPage",
+                        "label": "Success page",
+                        "type": "choice",
+                        "bindable": true,
+                        "required": true,
+                        "operation": "project.pages",
+                        "initialPreset": "homePage"
+                    },
+                    {
+                        "key": "successPageQueryParams",
+                        "label": "Success page query parameters",
+                        "type": "list",
+                        "bindable": true,
+                        "item": {
+                            "type": "record",
+                            "fields": [
+                                {
+                                    "key": "name",
+                                    "label": "Name",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "value",
+                                    "label": "Value",
+                                    "type": "text",
+                                    "bindable": true
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "key": "cancelPage",
+                        "label": "Cancel page",
+                        "type": "choice",
+                        "bindable": true,
+                        "required": true,
+                        "operation": "project.pages",
+                        "initialPreset": "homePage"
+                    },
+                    {
+                        "key": "cancelPageQueryParams",
+                        "label": "Cancel page query parameters",
+                        "type": "list",
+                        "bindable": true,
+                        "item": {
+                            "type": "record",
+                            "fields": [
+                                {
+                                    "key": "name",
+                                    "label": "Name",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "value",
+                                    "label": "Value",
+                                    "type": "text",
+                                    "bindable": true
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "key": "prices",
+                        "label": "Prices",
+                        "type": "list",
+                        "bindable": true,
+                        "item": {
+                            "type": "record",
+                            "fields": [
+                                {
+                                    "key": "price",
+                                    "label": "Price ID",
+                                    "type": "text",
+                                    "bindable": true,
+                                    "required": true
+                                },
+                                {
+                                    "key": "quantity",
+                                    "label": "Quantity",
+                                    "type": "number",
+                                    "bindable": true,
+                                    "initial": 1
+                                }
+                            ]
+                        },
+                        "required": true,
+                        "minItems": 1,
+                        "initialPreset": "firstRow"
+                    },
+                    {
+                        "key": "shippings",
+                        "label": "Shipping rates",
+                        "type": "list",
+                        "bindable": true,
+                        "item": {
+                            "type": "record",
+                            "fields": [
+                                {
+                                    "key": "shipping_rate",
+                                    "label": "Shipping rate ID",
+                                    "type": "text",
+                                    "bindable": true,
+                                    "required": true
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "key": "customerId",
+                        "label": "Customer ID",
+                        "type": "text",
+                        "bindable": true
+                    },
+                    {
+                        "key": "customerEmail",
+                        "label": "Customer email",
+                        "type": "text",
+                        "bindable": true
+                    },
+                    {
+                        "key": "isPhoneCollection",
+                        "label": "Collect phone number",
+                        "type": "choice",
+                        "bindable": true,
+                        "choices": [
+                            {
+                                "label": "Enable",
+                                "value": true
+                            },
+                            {
+                                "label": "Disable",
+                                "value": false
+                            }
+                        ]
+                    },
+                    {
+                        "key": "isPromoCode",
+                        "label": "Promotion codes",
+                        "type": "choice",
+                        "bindable": true,
+                        "choices": [
+                            {
+                                "label": "Enable",
+                                "value": true
+                            },
+                            {
+                                "label": "Disable",
+                                "value": false
+                            }
+                        ]
+                    },
+                    {
+                        "key": "isAutoTax",
+                        "label": "Automatic tax",
+                        "type": "choice",
+                        "bindable": true,
+                        "choices": [
+                            {
+                                "label": "Enable",
+                                "value": true
+                            },
+                            {
+                                "label": "Disable",
+                                "value": false
+                            }
+                        ]
+                    },
+                    {
+                        "key": "isQuantityAdjustable",
+                        "label": "Adjustable quantity",
+                        "type": "choice",
+                        "bindable": true,
+                        "choices": [
+                            {
+                                "label": "Enable",
+                                "value": true
+                            },
+                            {
+                                "label": "Disable",
+                                "value": false
+                            }
+                        ]
+                    },
+                    {
+                        "key": "minQuantity",
+                        "label": "Minimum quantity",
+                        "type": "number",
+                        "bindable": true,
+                        "visibleWhen": {
+                            "field": "isQuantityAdjustable",
+                            "truthy": true
+                        },
+                        "min": 1
+                    },
+                    {
+                        "key": "maxQuantity",
+                        "label": "Maximum quantity",
+                        "type": "number",
+                        "bindable": true,
+                        "visibleWhen": {
+                            "field": "isQuantityAdjustable",
+                            "truthy": true
+                        },
+                        "min": 1
+                    },
+                    {
+                        "key": "locale",
+                        "label": "Checkout language",
+                        "type": "choice",
+                        "bindable": true,
+                        "choices": [
+                            {
+                                "label": "Current page lang",
+                                "value": null
+                            },
+                            {
+                                "label": "Auto (Browser lang)",
+                                "value": "auto"
+                            },
+                            {
+                                "label": "Bulgarian",
+                                "value": "bg"
+                            },
+                            {
+                                "label": "Czech",
+                                "value": "cs"
+                            },
+                            {
+                                "label": "Danish",
+                                "value": "da"
+                            },
+                            {
+                                "label": "German",
+                                "value": "de"
+                            },
+                            {
+                                "label": "Greek",
+                                "value": "el"
+                            },
+                            {
+                                "label": "English",
+                                "value": "en"
+                            },
+                            {
+                                "label": "English (United Kingdom)",
+                                "value": "en-GB"
+                            },
+                            {
+                                "label": "Spanish",
+                                "value": "es"
+                            },
+                            {
+                                "label": "Spanish (Latin America)",
+                                "value": "es-419"
+                            },
+                            {
+                                "label": "Estonian",
+                                "value": "et"
+                            },
+                            {
+                                "label": "Finnish",
+                                "value": "fi"
+                            },
+                            {
+                                "label": "Filipino",
+                                "value": "fil"
+                            },
+                            {
+                                "label": "French",
+                                "value": "fr"
+                            },
+                            {
+                                "label": "French (Canada)",
+                                "value": "fr-CA"
+                            },
+                            {
+                                "label": "Croatian",
+                                "value": "hr"
+                            },
+                            {
+                                "label": "Hungarian",
+                                "value": "hu"
+                            },
+                            {
+                                "label": "Indonesian",
+                                "value": "id"
+                            },
+                            {
+                                "label": "Italian",
+                                "value": "it"
+                            },
+                            {
+                                "label": "Japanese",
+                                "value": "ja"
+                            },
+                            {
+                                "label": "Korean",
+                                "value": "ko"
+                            },
+                            {
+                                "label": "Lithuanian",
+                                "value": "lt"
+                            },
+                            {
+                                "label": "Latvian",
+                                "value": "lv"
+                            },
+                            {
+                                "label": "Malay",
+                                "value": "ms"
+                            },
+                            {
+                                "label": "Maltese",
+                                "value": "mt"
+                            },
+                            {
+                                "label": "Norwegian bokmål",
+                                "value": "nb"
+                            },
+                            {
+                                "label": "Dutch",
+                                "value": "nl"
+                            },
+                            {
+                                "label": "Polish",
+                                "value": "pl"
+                            },
+                            {
+                                "label": "Portuguese",
+                                "value": "pt"
+                            },
+                            {
+                                "label": "Portuguese (Brazil)",
+                                "value": "pt-BR"
+                            },
+                            {
+                                "label": "Romanian",
+                                "value": "ro"
+                            },
+                            {
+                                "label": "Russian",
+                                "value": "ru"
+                            },
+                            {
+                                "label": "Slovak",
+                                "value": "sk"
+                            },
+                            {
+                                "label": "Slovenian",
+                                "value": "sl"
+                            },
+                            {
+                                "label": "Swedish",
+                                "value": "sv"
+                            },
+                            {
+                                "label": "Thai",
+                                "value": "th"
+                            },
+                            {
+                                "label": "Turkish",
+                                "value": "tr"
+                            },
+                            {
+                                "label": "Vietnamese",
+                                "value": "vi"
+                            },
+                            {
+                                "label": "Chinese (simplified)",
+                                "value": "zh"
+                            },
+                            {
+                                "label": "Chinese (Hong Kong)",
+                                "value": "zh-HK"
+                            },
+                            {
+                                "label": "Chinese (Taiwan)",
+                                "value": "zh-TW"
+                            }
+                        ],
+                        "initial": "auto"
+                    },
+                    {
+                        "key": "metadata",
+                        "label": "Metadata",
+                        "type": "list",
+                        "bindable": true,
+                        "item": {
+                            "type": "record",
+                            "fields": [
+                                {
+                                    "key": "key",
+                                    "label": "Key",
+                                    "type": "text",
+                                    "bindable": true
+                                },
+                                {
+                                    "key": "value",
+                                    "label": "Value",
+                                    "type": "text",
+                                    "bindable": true
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "code": "customerPortal",
+            "name": "Customer portal",
+            "isAsync": true,
+            "validation": "requiredFields",
+            "form": {
+                "fields": [
+                    {
+                        "key": "customerId",
+                        "label": "Customer ID",
+                        "type": "text",
+                        "bindable": true,
+                        "required": true
+                    },
+                    {
+                        "key": "cancelPage",
+                        "label": "Cancel page",
+                        "type": "choice",
+                        "bindable": true,
+                        "required": true,
+                        "operation": "project.pages"
+                    }
+                ]
+            }
+        },
+        {
+            "code": "createPaymentIntent",
+            "name": "Create payment intent",
+            "isAsync": true,
+            "validation": "requiredFields",
+            "form": {
+                "fields": [
+                    {
+                        "key": "paymentMethods",
+                        "label": "Payment methods",
+                        "type": "choice",
+                        "required": true,
+                        "multiple": true,
+                        "minItems": 1,
+                        "choices": [
+                            {
+                                "label": "ACH Direct Debit",
+                                "value": "us_bank_account"
+                            },
+                            {
+                                "label": "Affirm",
+                                "value": "affirm"
+                            },
+                            {
+                                "label": "Afterpay and Clearpay",
+                                "value": "afterpay_clearpay"
+                            },
+                            {
+                                "label": "Alipay",
+                                "value": "alipay"
+                            },
+                            {
+                                "label": "Bacs Direct Debit",
+                                "value": "bacs_debit"
+                            },
+                            {
+                                "label": "Bancontact",
+                                "value": "bancontact"
+                            },
+                            {
+                                "label": "BECS direct debit",
+                                "value": "au_becs_debit"
+                            },
+                            {
+                                "label": "Boleto",
+                                "value": "boleto"
+                            },
+                            {
+                                "label": "Cards",
+                                "value": "card"
+                            },
+                            {
+                                "label": "EPS",
+                                "value": "eps"
+                            },
+                            {
+                                "label": "FPX",
+                                "value": "fpx"
+                            },
+                            {
+                                "label": "Giropay",
+                                "value": "giropay"
+                            },
+                            {
+                                "label": "GrabPay",
+                                "value": "grabpay"
+                            },
+                            {
+                                "label": "iDEAL",
+                                "value": "ideal"
+                            },
+                            {
+                                "label": "Klarna",
+                                "value": "klarna"
+                            },
+                            {
+                                "label": "Konbini",
+                                "value": "konbini"
+                            },
+                            {
+                                "label": "Link",
+                                "value": "link"
+                            },
+                            {
+                                "label": "OXXO",
+                                "value": "oxxo"
+                            },
+                            {
+                                "label": "P24",
+                                "value": "p24"
+                            },
+                            {
+                                "label": "PayNow",
+                                "value": "paynow"
+                            },
+                            {
+                                "label": "Pre-authorized debit in Canada",
+                                "value": "acss_debit"
+                            },
+                            {
+                                "label": "SEPA debit",
+                                "value": "sepa_debit"
+                            },
+                            {
+                                "label": "Sofort",
+                                "value": "sofort"
+                            },
+                            {
+                                "label": "Twint",
+                                "value": "twint"
+                            },
+                            {
+                                "label": "WeChat Pay",
+                                "value": "wechat_pay"
+                            }
+                        ],
+                        "initial": ["card"]
+                    },
+                    {
+                        "key": "prices",
+                        "label": "Prices",
+                        "type": "list",
+                        "bindable": true,
+                        "item": {
+                            "type": "record",
+                            "fields": [
+                                {
+                                    "key": "price",
+                                    "label": "Price ID",
+                                    "type": "text",
+                                    "bindable": true,
+                                    "required": true
+                                },
+                                {
+                                    "key": "quantity",
+                                    "label": "Quantity",
+                                    "type": "number",
+                                    "bindable": true,
+                                    "initial": 1
+                                }
+                            ]
+                        },
+                        "required": true,
+                        "minItems": 1,
+                        "initialPreset": "firstRow",
+                        "acceptBoundList": true
+                    },
+                    {
+                        "key": "customerId",
+                        "label": "Customer ID",
+                        "type": "text",
+                        "bindable": true
+                    }
+                ]
+            }
+        },
+        {
+            "code": "retrievePaymentIntent",
+            "name": "Retrieve payment intent",
+            "isAsync": true,
+            "validation": "requiredFields",
+            "form": {
+                "fields": [
+                    {
+                        "key": "clientSecret",
+                        "label": "Client secret",
+                        "type": "text",
+                        "bindable": true,
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "code": "confirmPayment",
+            "name": "Confirm payment",
+            "isAsync": true,
+            "validation": "requiredFields",
+            "form": {
+                "fields": [
+                    {
+                        "key": "elementId",
+                        "label": "Stripe element",
+                        "type": "choice",
+                        "bindable": true,
+                        "required": true,
+                        "projectVariable": {
+                            "scope": "component",
+                            "type": "stripe-payment"
+                        }
+                    },
+                    {
+                        "key": "redirectPage",
+                        "label": "Return page",
+                        "type": "choice",
+                        "bindable": true,
+                        "required": true,
+                        "operation": "project.pages"
+                    }
+                ]
+            }
+        },
+        {
+            "code": "confirmCardPayment",
+            "name": "Confirm card payment",
+            "isAsync": true,
+            "validation": "requiredFields",
+            "form": {
+                "fields": [
+                    {
+                        "key": "elementId",
+                        "label": "Stripe element",
+                        "type": "choice",
+                        "bindable": true,
+                        "required": true,
+                        "projectVariable": {
+                            "scope": "component",
+                            "type": "stripe-card"
+                        }
+                    },
+                    {
+                        "key": "clientSecret",
+                        "label": "Client secret",
+                        "type": "text",
+                        "bindable": true,
+                        "required": true
+                    }
+                ]
+            }
+        }
+    ]
+}

@@ -35,14 +35,16 @@ export default {
         try {
             this.instance = await loadStripe(publicApiKey);
             /* wwEditor:start */
-            this.instance = await new Promise(resolve =>
-                setTimeout(async () => {
-                    resolve(await wwLib.getFrontWindow().Stripe(publicApiKey));
-                }, 2500)
-            );
+            // The previous editor mounts Elements in a separate document. In
+            // the isolated editor the SDK and Elements share the canvas.
+            if (wwLib.getFrontWindow() !== window) {
+                this.instance = await new Promise(resolve =>
+                    setTimeout(() => resolve(wwLib.getFrontWindow().Stripe(publicApiKey)), 2500)
+                );
+            }
             /* wwEditor:end */
-            this.isInstanceLoaded.value = true;
             if (!this.instance) throw new Error('Invalid Stripe configuration.');
+            this.isInstanceLoaded.value = true;
         } catch (err) {
             wwLib.wwLog.error(err);
             /* wwEditor:start */
