@@ -41,6 +41,8 @@ export default {
         await this.load(settings.publicData.publicApiKey);
         /* wwFront:end */
         /* wwEditor:start */
+        // The isolated manager includes only the publishable key approved for
+        // this document. Older editors still provide their original settings.
         await this.load(settings.publicData.publicTestApiKey || settings.publicData.publicApiKey);
         /* wwEditor:end */
     },
@@ -72,26 +74,29 @@ export default {
             /* wwEditor:end */
         }
     },
-    async checkout({
-        prices,
-        successPage,
-        successPageQueryParams = [],
-        cancelPage,
-        cancelPageQueryParams = [],
-        customerId,
-        customerEmail,
-        paymentMethods,
-        isQuantityAdjustable,
-        minQuantity,
-        maxQuantity,
-        isPromoCode,
-        mode,
-        shippings,
-        isPhoneCollection,
-        isAutoTax,
-        locale,
-        metadata,
-    }) {
+    async checkout(
+        {
+            prices,
+            successPage,
+            successPageQueryParams = [],
+            cancelPage,
+            cancelPageQueryParams = [],
+            customerId,
+            customerEmail,
+            paymentMethods,
+            isQuantityAdjustable,
+            minQuantity,
+            maxQuantity,
+            isPromoCode,
+            mode,
+            shippings,
+            isPhoneCollection,
+            isAutoTax,
+            locale,
+            metadata,
+        },
+        wwUtils
+    ) {
         if (!mode) throw new Error('No mode defined.');
         if (!prices || !prices.length) throw new Error('No product defined.');
         if (!paymentMethods || !paymentMethods.length) throw new Error('No payment method defined.');
@@ -103,6 +108,13 @@ export default {
             const successUrl = projectPageUrl(successPage);
             const cancelUrl = projectPageUrl(cancelPage);
 
+            /* wwEditor:start */
+            if (wwLib.editor?.isolatedCanvas) {
+                const { url } = await wwUtils.runPreviewAction();
+                window.location.assign(url);
+                return;
+            }
+            /* wwEditor:end */
             const successQuery = new URLSearchParams(
                 successPageQueryParams.reduce((acc, query) => {
                     if (query.value) acc[query.name] = query.value;
@@ -139,17 +151,24 @@ export default {
 
             window.location.href = session.url;
         } catch (err) {
-            throw new Error(err?.response?.data);
+            throw err?.response ? new Error(err.response.data) : err;
         }
     },
-    async customerPortal({ customerId, cancelPage }) {
-        if (!customerId) throw new Error('No currency defined.');
+    async customerPortal({ customerId, cancelPage }, wwUtils) {
+        if (!customerId) throw new Error('No customer ID defined.');
         if (!cancelPage) throw new Error('No cancel page defined.');
         try {
             const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
             const cancelUrl = projectPageUrl(cancelPage);
 
+            /* wwEditor:start */
+            if (wwLib.editor?.isolatedCanvas) {
+                const { url } = await wwUtils.runPreviewAction();
+                window.location.assign(url);
+                return;
+            }
+            /* wwEditor:end */
             const { data: session } = await axios.post(
                 `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/stripe/create-customer-portal-session`,
                 { customerId, cancelUrl }
@@ -160,18 +179,21 @@ export default {
             throw err.response || err;
         }
     },
-    async createPaymentIntent({ prices, customerId, paymentMethods }) {
+    async createPaymentIntent({ prices, customerId, paymentMethods }, wwUtils) {
         if (!prices || !prices.length) throw new Error('No product defined.');
         if (!paymentMethods || !paymentMethods.length) throw new Error('No payment method defined.');
         try {
             const websiteId = wwLib.wwWebsiteData.getInfo().id;
+            /* wwEditor:start */
+            if (wwLib.editor?.isolatedCanvas) return await wwUtils.runPreviewAction();
+            /* wwEditor:end */
             const { data: paymentIntent } = await axios.post(
                 `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/stripe/create-payment-intent`,
                 { prices, customerId, paymentMethods }
             );
             return paymentIntent;
         } catch (err) {
-            throw new Error(err.response.data);
+            throw err?.response ? new Error(err.response.data) : err;
         }
     },
     async retrievePaymentIntent({ clientSecret }) {
