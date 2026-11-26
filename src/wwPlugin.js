@@ -28,6 +28,14 @@ export default {
     /*=============================================m_ÔÔ_m=============================================\
         Plugin API
     \================================================================================================*/
+    /* wwEditor:start */
+    onPreviewSettingsChanged(current, previous) {
+        // Mounted Elements belong to their original Stripe instance. Replace the
+        // preview document to renew both the SDK and its component variables.
+        const key = current.publicTestApiKey || current.publicApiKey;
+        if (key !== (previous.publicTestApiKey || previous.publicApiKey)) window.location.reload();
+    },
+    /* wwEditor:end */
     async _onLoad(settings) {
         /* wwFront:start */
         await this.load(settings.publicData.publicApiKey);
