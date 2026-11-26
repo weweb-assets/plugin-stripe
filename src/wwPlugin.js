@@ -13,6 +13,15 @@ import './components/Functions/ConfirmCardPayment.vue';
 import { loadStripe } from '@stripe/stripe-js';
 import locales from './locales';
 
+function projectPageUrl(page) {
+    /* wwEditor:start */
+    if (wwLib.editor?.isolatedCanvas) return wwLib.editor.previewPageUrl(page);
+    /* wwEditor:end */
+    return wwLib.manager
+        ? `${window.location.origin}/${page}`
+        : `${window.location.origin}${wwLib.wwPageHelper.getPagePath(page)}`;
+}
+
 export default {
     instance: null,
     isInstanceLoaded: ref(false),
@@ -83,12 +92,8 @@ export default {
         try {
             const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
-            const successUrl = wwLib.manager
-                ? `${window.location.origin}/${successPage}`
-                : `${window.location.origin}${wwLib.wwPageHelper.getPagePath(successPage)}`;
-            const cancelUrl = wwLib.manager
-                ? `${window.location.origin}/${cancelPage}`
-                : `${window.location.origin}${wwLib.wwPageHelper.getPagePath(cancelPage)}`;
+            const successUrl = projectPageUrl(successPage);
+            const cancelUrl = projectPageUrl(cancelPage);
 
             const successQuery = new URLSearchParams(
                 successPageQueryParams.reduce((acc, query) => {
@@ -135,9 +140,7 @@ export default {
         try {
             const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
-            const cancelUrl = wwLib.manager
-                ? `${window.location.origin}/${cancelPage}`
-                : `${window.location.origin}${wwLib.wwPageHelper.getPagePath(cancelPage)}`;
+            const cancelUrl = projectPageUrl(cancelPage);
 
             const { data: session } = await axios.post(
                 `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/stripe/create-customer-portal-session`,
@@ -146,7 +149,7 @@ export default {
 
             window.location.href = session.url;
         } catch (err) {
-            throw err.response;
+            throw err.response || err;
         }
     },
     async createPaymentIntent({ prices, customerId, paymentMethods }) {
@@ -176,9 +179,7 @@ export default {
         const elements = wwLib.wwVariable.getValue(elementId);
         if (!elements) throw new Error('Invalid Stripe element.');
 
-        const redirectUrl = wwLib.manager
-            ? `${window.location.origin}/${redirectPage}`
-            : `${window.location.origin}${wwLib.wwPageHelper.getPagePath(redirectPage)}`;
+        const redirectUrl = projectPageUrl(redirectPage);
 
         const { error } = await this.instance.confirmPayment({
             elements,
