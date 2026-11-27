@@ -382,6 +382,18 @@
                                 "label": "Disable",
                                 "value": false
                             }
+                        ],
+                        "updates": [
+                            {
+                                "equals": true,
+                                "field": "minQuantity",
+                                "value": 1
+                            },
+                            {
+                                "equals": true,
+                                "field": "maxQuantity",
+                                "value": 10
+                            }
                         ]
                     },
                     {
