@@ -13,17 +13,36 @@ import './components/Functions/ConfirmCardPayment.vue';
 import { loadStripe } from '@stripe/stripe-js';
 import locales from './locales';
 
+function projectPageUrl(page) {
+    /* wwEditor:start */
+    if (wwLib.editor?.isolatedCanvas) return wwLib.editor.previewPageUrl(page);
+    /* wwEditor:end */
+    return wwLib.manager
+        ? `${window.location.origin}/${page}`
+        : `${window.location.origin}${wwLib.wwPageHelper.getPagePath(page)}`;
+}
+
 export default {
     instance: null,
     isInstanceLoaded: ref(false),
     /*=============================================m_ÔÔ_m=============================================\
         Plugin API
     \================================================================================================*/
+    /* wwEditor:start */
+    onPreviewSettingsChanged(current, previous) {
+        // Mounted Elements belong to their original Stripe instance. Replace the
+        // preview document to renew both the SDK and its component variables.
+        const key = current.publicTestApiKey || current.publicApiKey;
+        if (key !== (previous.publicTestApiKey || previous.publicApiKey)) window.location.reload();
+    },
+    /* wwEditor:end */
     async _onLoad(settings) {
         /* wwFront:start */
         await this.load(settings.publicData.publicApiKey);
         /* wwFront:end */
         /* wwEditor:start */
+        // The isolated manager includes only the publishable key approved for
+        // this document. Older editors still provide their original settings.
         await this.load(settings.publicData.publicTestApiKey || settings.publicData.publicApiKey);
         /* wwEditor:end */
     },
@@ -35,14 +54,16 @@ export default {
         try {
             this.instance = await loadStripe(publicApiKey);
             /* wwEditor:start */
-            this.instance = await new Promise(resolve =>
-                setTimeout(async () => {
-                    resolve(await wwLib.getFrontWindow().Stripe(publicApiKey));
-                }, 2500)
-            );
+            // The previous editor mounts Elements in a separate document. In
+            // the isolated editor the SDK and Elements share the canvas.
+            if (wwLib.getFrontWindow() !== window) {
+                this.instance = await new Promise(resolve =>
+                    setTimeout(() => resolve(wwLib.getFrontWindow().Stripe(publicApiKey)), 2500)
+                );
+            }
             /* wwEditor:end */
-            this.isInstanceLoaded.value = true;
             if (!this.instance) throw new Error('Invalid Stripe configuration.');
+            this.isInstanceLoaded.value = true;
         } catch (err) {
             wwLib.wwLog.error(err);
             /* wwEditor:start */
@@ -53,26 +74,29 @@ export default {
             /* wwEditor:end */
         }
     },
-    async checkout({
-        prices,
-        successPage,
-        successPageQueryParams = [],
-        cancelPage,
-        cancelPageQueryParams = [],
-        customerId,
-        customerEmail,
-        paymentMethods,
-        isQuantityAdjustable,
-        minQuantity,
-        maxQuantity,
-        isPromoCode,
-        mode,
-        shippings,
-        isPhoneCollection,
-        isAutoTax,
-        locale,
-        metadata,
-    }) {
+    async checkout(
+        {
+            prices,
+            successPage,
+            successPageQueryParams = [],
+            cancelPage,
+            cancelPageQueryParams = [],
+            customerId,
+            customerEmail,
+            paymentMethods,
+            isQuantityAdjustable,
+            minQuantity,
+            maxQuantity,
+            isPromoCode,
+            mode,
+            shippings,
+            isPhoneCollection,
+            isAutoTax,
+            locale,
+            metadata,
+        },
+        wwUtils
+    ) {
         if (!mode) throw new Error('No mode defined.');
         if (!prices || !prices.length) throw new Error('No product defined.');
         if (!paymentMethods || !paymentMethods.length) throw new Error('No payment method defined.');
@@ -81,13 +105,16 @@ export default {
         try {
             const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
-            const successUrl = wwLib.manager
-                ? `${window.location.origin}/${successPage}`
-                : `${window.location.origin}${wwLib.wwPageHelper.getPagePath(successPage)}`;
-            const cancelUrl = wwLib.manager
-                ? `${window.location.origin}/${cancelPage}`
-                : `${window.location.origin}${wwLib.wwPageHelper.getPagePath(cancelPage)}`;
+            const successUrl = projectPageUrl(successPage);
+            const cancelUrl = projectPageUrl(cancelPage);
 
+            /* wwEditor:start */
+            if (wwLib.editor?.isolatedCanvas) {
+                const { url } = await wwUtils.runPreviewAction();
+                window.location.assign(url);
+                return;
+            }
+            /* wwEditor:end */
             const successQuery = new URLSearchParams(
                 successPageQueryParams.reduce((acc, query) => {
                     if (query.value) acc[query.name] = query.value;
@@ -124,19 +151,24 @@ export default {
 
             window.location.href = session.url;
         } catch (err) {
-            throw new Error(err?.response?.data);
+            throw err?.response ? new Error(err.response.data) : err;
         }
     },
-    async customerPortal({ customerId, cancelPage }) {
-        if (!customerId) throw new Error('No currency defined.');
+    async customerPortal({ customerId, cancelPage }, wwUtils) {
+        if (!customerId) throw new Error('No customer ID defined.');
         if (!cancelPage) throw new Error('No cancel page defined.');
         try {
             const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
-            const cancelUrl = wwLib.manager
-                ? `${window.location.origin}/${cancelPage}`
-                : `${window.location.origin}${wwLib.wwPageHelper.getPagePath(cancelPage)}`;
+            const cancelUrl = projectPageUrl(cancelPage);
 
+            /* wwEditor:start */
+            if (wwLib.editor?.isolatedCanvas) {
+                const { url } = await wwUtils.runPreviewAction();
+                window.location.assign(url);
+                return;
+            }
+            /* wwEditor:end */
             const { data: session } = await axios.post(
                 `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/stripe/create-customer-portal-session`,
                 { customerId, cancelUrl }
@@ -144,21 +176,24 @@ export default {
 
             window.location.href = session.url;
         } catch (err) {
-            throw err.response;
+            throw err.response || err;
         }
     },
-    async createPaymentIntent({ prices, customerId, paymentMethods }) {
+    async createPaymentIntent({ prices, customerId, paymentMethods }, wwUtils) {
         if (!prices || !prices.length) throw new Error('No product defined.');
         if (!paymentMethods || !paymentMethods.length) throw new Error('No payment method defined.');
         try {
             const websiteId = wwLib.wwWebsiteData.getInfo().id;
+            /* wwEditor:start */
+            if (wwLib.editor?.isolatedCanvas) return await wwUtils.runPreviewAction();
+            /* wwEditor:end */
             const { data: paymentIntent } = await axios.post(
                 `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/stripe/create-payment-intent`,
                 { prices, customerId, paymentMethods }
             );
             return paymentIntent;
         } catch (err) {
-            throw new Error(err.response.data);
+            throw err?.response ? new Error(err.response.data) : err;
         }
     },
     async retrievePaymentIntent({ clientSecret }) {
@@ -174,9 +209,7 @@ export default {
         const elements = wwLib.wwVariable.getValue(elementId);
         if (!elements) throw new Error('Invalid Stripe element.');
 
-        const redirectUrl = wwLib.manager
-            ? `${window.location.origin}/${redirectPage}`
-            : `${window.location.origin}${wwLib.wwPageHelper.getPagePath(redirectPage)}`;
+        const redirectUrl = projectPageUrl(redirectPage);
 
         const { error } = await this.instance.confirmPayment({
             elements,
