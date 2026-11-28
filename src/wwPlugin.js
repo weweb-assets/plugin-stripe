@@ -35,11 +35,20 @@ export default {
         try {
             this.instance = await loadStripe(publicApiKey);
             /* wwEditor:start */
-            this.instance = await new Promise(resolve =>
-                setTimeout(async () => {
-                    resolve(await wwLib.getFrontWindow().Stripe(publicApiKey));
-                }, 2500)
-            );
+            // In the canvas, rebuild the instance from the page's Stripe.js. The editor window has no page and keeps the
+            // instance from loadStripe, which is enough to check the key in the settings form.
+            const frontWindow = wwLib.getFrontWindow();
+            if (frontWindow) {
+                this.instance = await new Promise((resolve, reject) =>
+                    setTimeout(() => {
+                        try {
+                            resolve(frontWindow.Stripe(publicApiKey));
+                        } catch (error) {
+                            reject(error);
+                        }
+                    }, 2500)
+                );
+            }
             /* wwEditor:end */
             this.isInstanceLoaded.value = true;
             if (!this.instance) throw new Error('Invalid Stripe configuration.');
